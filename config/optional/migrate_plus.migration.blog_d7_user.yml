@@ -1,0 +1,115 @@
+langcode: en
+status: true
+dependencies: {  }
+id: blog_d7_user
+class: Drupal\user\Plugin\migrate\User
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: blog
+label: 'User accounts'
+source:
+  plugin: d7_user
+process:
+  uid:
+      plugin: skip_on_value
+      equals: true
+      source: uid
+      method: row
+      value:
+        - 1
+  name:
+    -
+      plugin: get
+      source: name
+  pass:
+    -
+      plugin: get
+      source: pass
+  mail:
+    -
+      plugin: get
+      source: mail
+  created:
+    -
+      plugin: get
+      source: created
+  access:
+    -
+      plugin: get
+      source: access
+  login:
+    -
+      plugin: get
+      source: login
+  status:
+    -
+      plugin: get
+      source: status
+  timezone:
+    -
+      plugin: get
+      source: timezone
+  langcode:
+    -
+      plugin: user_langcode
+      source: entity_language
+      fallback_to_site_default: false
+  preferred_langcode:
+    -
+      plugin: user_langcode
+      source: language
+      fallback_to_site_default: true
+  preferred_admin_langcode:
+    -
+      plugin: user_langcode
+      source: language
+      fallback_to_site_default: true
+  init:
+    -
+      plugin: get
+      source: init
+  roles:
+      plugin: static_map
+      bypass: true
+      source: roles
+      map:
+        3: administrator
+        5: 'editor'
+        6: 'content_manager'
+        7: 'contributor'
+        # Rid different in prod
+        9: 'content_admin'
+#      plugin: migration_lookup
+#      migration: blog_d7_user_role
+#      source: roles
+#  user_picture:
+#    -
+#      plugin: default_value
+#      source: picture
+#      default_value: null
+#    -
+#      plugin: migration_lookup
+#      migration: blog_d7_file
+  field_first_name:
+    -
+      plugin: get
+      source: field_first_name
+  field_last_name:
+    -
+      plugin: get
+      source: field_last_name
+destination:
+  plugin: 'entity:user'
+migration_dependencies:
+  required: { }
+#    - blog_d7_user_role
+  optional:
+    - blog_d7_field_instance
+#    - blog_d7_file
+#    - blog_user_picture_field_instance
+#    - blog_user_picture_entity_display
+#    - blog_user_picture_entity_form_display
+#    - blog_d7_user_role

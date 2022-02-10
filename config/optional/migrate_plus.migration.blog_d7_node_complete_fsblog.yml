@@ -1,0 +1,170 @@
+langcode: en
+status: true
+dependencies: {  }
+id: blog_d7_node_complete_fsblog
+class: Drupal\node\Plugin\migrate\D7NodeTranslation
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+migration_group: blog
+label: 'Node complete (Facilities blog post)'
+source:
+  plugin: d7_node_complete
+  node_type: fsblog
+process:
+  nid: tnid
+  vid: vid
+  langcode:
+    -
+      plugin: default_value
+      source: language
+      default_value: und
+  title: title
+  uid:
+    -
+      plugin: get
+      source: node_uid
+  status: status
+  created: created
+  changed: timestamp
+  promote: promote
+  sticky: sticky
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp:  timestamp
+  content_translation_source: source_langcode
+#  comment_node_fsblog/0/status:
+#    -
+#      plugin: get
+#      source: comment
+  field_fsblog_subheading: field_fsblog_subheading
+  field_fsblog_highlight: field_fsblog_highlight
+  field_fsblog_tags:
+    -
+      plugin: sub_process
+      source: field_fsblog_tags
+      process:
+        target_id: tid
+  field_fsblog_hero:
+    -
+      plugin: media_migration_delta_sort
+      source: field_fsblog_hero
+    -
+      plugin: sub_process
+      process:
+        target_id: fid
+  field_fsblog_hero_thumb:
+    -
+      plugin: media_migration_delta_sort
+      source: field_fsblog_hero_thumb
+    -
+      plugin: sub_process
+      process:
+        target_id: fid
+  field_fsblog_lede:
+    plugin: sub_process
+    source: field_fsblog_lede
+    process:
+      target_id:
+        - plugin: migration_lookup
+          migration:
+            - blog_d7_paragraph_fsblog_section
+#            - paragraph_grid
+#            - paragraph_text_embedded
+          source: value
+        - plugin: extract
+          index:
+            - 0
+      target_revision_id:
+        - plugin: migration_lookup
+          migration:
+            - blog_d7_paragraph_fsblog_section
+          #            - paragraph_grid
+          #            - paragraph_text_embedded
+          source: value
+        - plugin: extract
+          index:
+            - 1
+#    -
+#      plugin: skip_on_empty
+#      method: process
+#      # varies
+#      source: field_fsblog_lede
+#    -
+#      plugin: migration_lookup
+#      # varies
+#      migration: blog_d7_paragraph_fsblog_section
+#      no_stub: true
+#    -
+#      plugin: sub_process
+#      process:
+#        target_id: '0'
+#        target_revision_id: '1'
+  field_fsblog_post_content:
+    plugin: sub_process
+    source: field_fsblog_post_content
+    process:
+#      paragraph_ids:
+#        plugin: migration_lookup
+#        migration:
+#          - blog_d7_paragraph_fsblog_section
+#          - blog_d7_paragraph_fsblog_full_image
+#        no_stub: true
+#        source: npp
+      target_id:
+        - plugin: migration_lookup
+          migration:
+            - blog_d7_paragraph_fsblog_section
+            - blog_d7_paragraph_fsblog_full_image
+          source: value
+        - plugin: extract
+          index:
+            - 0
+      target_revision_id:
+        - plugin: migration_lookup
+          migration:
+            - blog_d7_paragraph_fsblog_section
+            - blog_d7_paragraph_fsblog_full_image
+          source: value
+        - plugin: extract
+          index:
+            - 1
+#    -
+#      plugin: get
+#      source: field_fsblog_post_content
+#     -
+#       plugin: skip_on_empty
+#       method: process
+#       # varies
+#       source: field_fsblog_post_content
+#     -
+#       plugin: migration_lookup
+#       # varies
+#       migration: d7_paragraph_branch
+#       no_stub: true
+#     -
+#       plugin: sub_process
+#       process:
+#         target_id: '0'
+#         target_revision_id: '1'
+  field_fsblog_unit:
+    -
+      plugin: sub_process
+      source: field_fsblog_unit
+      process:
+        target_id: tid
+destination:
+  plugin: 'entity_complete:node'
+  translations: true
+  default_bundle: fsblog
+migration_dependencies:
+  required:
+    - blog_d7_user
+    - blog_d7_node_type
+    - blog_d7_file_entity_image_public
+    - blog_d7_paragraph_fsblog_section
+    - blog_d7_paragraph_fsblog_full_image
+  optional:
+    - blog_d7_field_instance

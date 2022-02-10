@@ -1,0 +1,421 @@
+<?php
+
+use Drupal\migrate\MigrateSkipRowException;
+use Drupal\migrate\Plugin\MigrateSourceInterface;
+use Drupal\migrate\Plugin\MigrationInterface;
+use Drupal\migrate\Row;
+
+/**
+ * Implements hook_migrate_prepare_row().
+ *
+ * This function will be called once for every row in every migration.
+ *
+ * We recommend at a minimum always checking the $migration->id() value to see
+ * which migration is currently being executed.
+ *
+ * @see https://drupalize.me/tutorial/use-hookmigratepreparerow?p=2578 for more
+ *   info.
+ */
+function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
+  $debug = FALSE;
+
+  $field_name_map = [
+    'field_fsblog_p_image' => 'field_p_isec_image',
+    'field_fsblog_p_title' => 'field_p_csec_title',
+    'field_fsblog_p_body' => 'field_p_csec_body',
+    'field_fsblog_p_class' => 'field_p_csec_style',
+    'field_fsblog_subheading' => 'field_post_subtitle',
+    'field_fsblog_unit' => 'field_post_unit',
+    'field_fsblog_tags' => 'field_post_tags',
+    'field_fsblog_hero' => 'field_post_hero',
+    'field_fsblog_hero_thumb' => 'field_post_hero_thumb',
+    'field_fsblog_lede' => 'field_post_lede',
+    'field_fsblog_post_content' => 'field_post_content',
+    'field_first_name' => 'field_user_first_name',
+    'field_last_name' => 'field_user_last_name',
+    'field_file_image_description' => 'field_media_descriptive_text'
+  ];
+
+  $bundle_map = [
+    'fsblog' => 'post',
+    'fsblog_section' => 'content_section',
+    'fsblog_full_image' => 'image_section',
+    'fs_units' => 'units',
+  ];
+
+  $excluded_fields = [
+    'comment_body',
+    'field_fsblog_p_class', // Temporarily
+    'field_fsblog_highlight', // Replace with 'Promoted' checkbox
+    'field_page_related_entity',
+    'field_fsblog_p_class',
+    // 'field_fsblog_post_content', // Temporarily
+    'field_image',
+    'field_tags'
+  ];
+
+  $excluded_entity_types = [
+    'comment',
+  ];
+
+  $excluded_bundles = [
+    'article', // Remnants from this content type being deleted
+  ];
+
+  $excluded_view_modes = [
+    'fs_search_result',
+    'fs_blog_slideshow',
+    'fsblog_tile',
+    'hero_image',
+    'hero_image_thumb',
+    'image_inline',
+    'image_left',
+    'image_only',
+    'image_right',
+  ];
+
+  // TEMP COMMENT OUT
+  // if ($debug && ($row->hasSourceProperty('view_mode') || $row->hasDestinationProperty('view_mode'))) {
+  //   $view_mode = $row->getSourceProperty('view_mode') ?? $row->getDestinationProperty('view_mode');
+  //   throw new MigrateSkipRowException('Debugging: view mode is ' . $view_mode, TRUE);
+  // }
+  switch ($migration->id()) {
+
+    // Customize field definitions
+    case 'blog_d7_field':
+      $field_name = $row->getSourceProperty('field_name');
+      $entity_type = $row->getSourceProperty('entity_type');
+      $bundle = $row->getSourceProperty('bundle');
+
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created field ' . $field_name, TRUE);
+      }
+
+      if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
+        throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Update field names
+      // if (array_key_exists($field_name, $field_name_map)) {
+      //   $row->setSourceProperty('field_name', $field_name_map[$field_name]);
+      // }
+
+      // TEMP COMMENT OUT
+      // Update associated bundles.
+      // $instances = $row->getSourceProperty('instances');
+      // $bundle = $instances[0]['bundle'];
+      // if (array_key_exists($bundle, $bundle_map)) {
+      //   $row->setSourceProperty('instances', $bundle_map[$bundle]);
+      // }
+
+
+      // switch ($instances[0]['bundle']) {
+      //   case 'fsblog':
+      //     $instances[0]['bundle'] = 'post';
+      //     $row->setSourceProperty('instances', $instances);
+      //     break;
+      //
+      //   case 'fsblog_section':
+      //     $instances[0]['bundle'] = 'content_section';
+      //     $row->setSourceProperty('instances', $instances);
+      //     break;
+      //
+      //   case 'fsblog_full_image':
+      //     $instances[0]['bundle'] = 'image_section';
+      //     $row->setSourceProperty('instances', $instances);
+      //     break;
+      // }
+      break;
+
+    // Customize Node type definitions
+    case 'blog_d7_node_type':
+      $node_bundle = $row->getSourceProperty('type');
+
+      // Skip unwanted bundles
+      if ($node_bundle == 'panel') {
+        throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
+      }
+
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created ' . $node_bundle, TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Rename some node types
+      // if (array_key_exists($node_bundle, $bundle_map)) {
+      //   $row->setSourceProperty('type', $bundle_map[$node_bundle]);
+      // }
+      // break;
+
+    // Customize paragraph type definitions
+    case 'blog_d7_paragraphs_type':
+      $paragraph_bundle = $row->getSourceProperty('bundle');
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created ' . $paragraph_bundle, TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Rename the paragraph types
+      // if (array_key_exists($paragraph_bundle, $bundle_map)) {
+      //   $row->setSourceProperty('bundle', $bundle_map[$paragraph_bundle]);
+      // }
+      // TEMP COMMENT OUT
+      // Also, change the name of the content section.
+      // if ($paragraph_bundle == 'fsblog_section') {
+      //   $row->setSourceProperty('name', 'Content section');
+      // }
+      break;
+
+    // Customize Taxonomy vocabulary definitions
+    case 'blog_d7_taxonomy_vocabulary':
+      $vocabulary = $row->getSourceProperty('machine_name');
+
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created ' . $vocabulary, TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Rename vocabulary(ies)
+      // if (array_key_exists($vocabulary, $bundle_map)) {
+      //   $row->setSourceProperty('machine_name', $bundle_map[$vocabulary]);
+      // }
+      break;
+
+    // Customize field instances and settings
+    case 'blog_d7_field_instance':
+    case 'blog_d7_field_formatter_settings':
+    case 'blog_d7_field_instance_widget_settings':
+
+      $field_name = $row->getSourceProperty('field_name');
+      $entity_type = $row->getSourceProperty('entity_type');
+      $bundle = $row->getSourceProperty('bundle');
+      // Skip some fields
+      if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
+        throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
+      }
+
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created ' . $field_name, TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Rename field
+      // if (array_key_exists($field_name, $field_name_map)) {
+      //   $row->setSourceProperty('field_name', $field_name_map[$field_name]);
+      // }
+
+      // TEMP COMMENT OUT
+      // Update bundle
+      // $bundle = $row->getSourceProperty('bundle');
+      // if (array_key_exists($bundle, $bundle_map)) {
+      //   $row->setSourceProperty('bundle', $bundle_map[$bundle]);
+      // }
+      break;
+
+    // Customize file import
+    case 'blog_d7_file':
+      $filepath = $row->getSourceProperty('filepath');
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created file ' . $filepath, TRUE);
+      }
+      if (!str_starts_with($filepath, 'files/media')) {
+        throw new MigrateSkipRowException($filepath . ' was skipped.', TRUE);
+      }
+      break;
+
+    // Customize view mode definitions
+    case 'blog_d7_view_modes':
+      $view_mode = $row->getSourceProperty('view_mode');
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: Would have created ' . $view_mode . ' view mode', TRUE);
+      }
+
+      // TEMP COMMENT OUT
+      // Exclude all view modes for ignored entity types
+      $entity_type = $row->getSourceProperty('entity_type');
+      if (in_array($entity_type, $excluded_entity_types)) {
+        throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
+      }
+      break;
+
+    // Customize view mode definitions
+    case 'blog_d7_media_view_modes':
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: Would have created ' . $row->getSourceProperty('mode'), TRUE);
+      }
+      // Exclude all view modes for ignored entity types
+      // $entity_type = $row->getSourceProperty('entity_type');
+      // if (in_array($entity_type, $excluded_entity_types)) {
+      //   throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
+      // }
+      break;
+
+    case 'blog_d7_file_entity_formatter_image':
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created ' . $row->getSourceProperty('field_name') . ' with view mode ' . $row->getDestinationProperty('view_mode'), TRUE);
+      }
+      break;
+  }
+
+
+  // Exclude some fields
+  // if ($migration->id() == 'blog_d7_field' || $migration->id() == 'blog_d7_field_instance' || $migration->id() == 'blog_d7_field_formatter_settings') {
+  //   // Drupal 7 field names for all the fields we DO want to migrate.
+  //   $excluded_fields = [
+  //     'comment_body', // Comment module is disabled
+  //     'field_markup_no_sidebar', // Requires a markup field module
+  //     // 'field_payperiod_dates',
+  //     'field_promo_markup_no_full_width', // Requires a markup field module
+  //   ];
+  //   // echo 'field name: ' . $row->getSourceProperty('field_name') . "\n\r";
+  //   // if ($row->getSourceProperty('field_name') == 'field_hrc_file') {
+  //   //   $row->setDestinationProperty('field_name', 'field_hrc_file_old');
+  //   // }
+  //   // The `field_name` property here comes from the source plugin which defines
+  //   // the list of source fields.
+  //   // @see \Drupal\field\Plugin\migrate\source\d7\Field::fields()
+  //   if (in_array($row->getSourceProperty('field_name'), $excluded_fields)) {
+  //     throw new MigrateSkipRowException($row->getSourceProperty('field_name') . ' was skipped intentionally', TRUE);
+  //   }
+  // }
+
+  // Exclude view modes for entity types we're ignoring
+  // if ($migration->id() == 'blog_d7_view_modes') {
+  //   $excluded_entity_types = [
+  //     'comment',
+  //   ];
+  //   $entity_type = $row->getSourceProperty('entity_type');
+  //
+  //   // Only include the entity types we're currently migrating. Don't filter by
+  //   // bundle as well because the view mode query just selects one for each pair
+  //   // of entity_type + view_mode. All bundles for an entity type use the same
+  //   // view modes.
+  //   if (in_array($entity_type, $excluded_entity_types)) {
+  //     throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
+  //   }
+  //   // echo 'entity type: ' . $entity_type . '; view mode: ' . $row->getSourceProperty('view_mode') . "\n\r";
+  // }
+
+  // $node_types = [
+  //   'hrc',
+  //   'page',
+  // ];
+  // $vocabs = [
+  //   'hrc_trades',
+  // ];
+  // $media = [
+  //   'document',
+  // ];
+  // $all_bundles = [
+  //   'node' => $node_types,
+  //   'taxonomy_term' => $vocabs,
+  //   'file' => $media,
+  // ];
+
+
+  // if ($migration->id() == 'blog_d7_node_type') {
+  //   // Skip any node bundle not listed above.
+  //   if (!in_array($row->getSourceProperty('type'), $node_types)) {
+  //     // Skip this row by throwing a new MigrateSkipRowException exception.
+  //     // Using FALSE here also instructs the Migrate API to forgo creating an
+  //     // entry in the map table for this particular record instead of marking
+  //     // it as ignored. Either would work in this case, this method works for us
+  //     // since we don't really need to record that it was STATUS_IGNORED for any
+  //     // reason.
+  //     throw new MigrateSkipRowException('', TRUE);
+  //   }
+  // }
+  // if ($migration->id() == 'blog_d7_taxonomy_vocabulary') {
+  //   // Skip any vocabularies not listed above.
+  //   if (!in_array($row->getSourceProperty('machine_name'), $vocabs)) {
+  //     throw new MigrateSkipRowException('', TRUE);
+  //   }
+  // }
+  // if ($migration->id() == 'blog_d7_view_modes') {
+  //   $entity_type = $row->getSourceProperty('entity_type');
+  //   // Only include the entity types we're currently migrating. Don't filter by
+  //   // bundle as well because the view mode query just selects one for each pair
+  //   // of entity_type + view_mode. All bundles for an entity type use the same
+  //   // view modes.
+  //   if (!in_array($entity_type, array_keys($all_bundles))) {
+  //     throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
+  //   }
+  //   // echo 'entity type: ' . $entity_type . '; view mode: ' . $row->getSourceProperty('view_mode') . "\n\r";
+  // }
+
+  // Specify field and field instances to migrate
+  // if ($migration->id() == 'blog_d7_field' || $migration->id() == 'blog_d7_field_instance' || $migration->id() == 'blog_d7_field_formatter_settings') {
+  //   // Drupal 7 field names for all the fields we DO want to migrate.
+  //   $fields = [
+  //     'field_hrc_code',
+  //     'field_hrc_trade',
+  //     'field_hrc_file',
+  //     'field_test_field',
+  //     'field_caption',
+  //     'field_file_image_alt_text',
+  //     'field_file_image_link_type',
+  //     'field_file_image_custom_link'
+  //   ];
+  //   // if ($row->getSourceProperty('field_name') == 'field_hrc_file') {
+  //   //   $row->setDestinationProperty('field_name', 'field_hrc_file_old');
+  //   // }
+  //   // The `field_name` property here comes from the source plugin which defines
+  //   // the list of source fields.
+  //   // @see \Drupal\field\Plugin\migrate\source\d7\Field::fields()
+  //   if (!in_array($row->getSourceProperty('field_name'), $fields)) {
+  //     throw new MigrateSkipRowException($row->getSourceProperty('field_name') . ' was skipped intentionally', TRUE);
+  //   }
+  // }
+
+  // Customize file import
+  // if ($migration->id() == 'blog_d7_file') {
+  //   $filepath = $row->getSourceProperty('filepath');
+  //   if (!str_starts_with($filepath, 'files/media')) {
+  //     throw new MigrateSkipRowException($filepath . ' was skipped.', TRUE);
+  //   }
+  // }
+
+  // Customize menu import - only import the main menu
+  if ($migration->id() == 'blog_d7_menu' || $migration->id() == 'blog_d7_menu_links') {
+    $menu_name = $row->getSourceProperty('menu_name');
+    if ($menu_name !== 'main-menu') {
+      if ($migration->id() == 'blog_d7_menu') {
+        throw new MigrateSkipRowException($menu_name . ' menu was skipped.', TRUE);
+      }
+      else {
+        $link_path = $row->getSourceProperty('link_path');
+        throw new MigrateSkipRowException($menu_name . ' menu link "' . $link_path . '" was skipped.', TRUE);
+      }
+    }
+  }
+
+  // This example performs some extra processing when running the
+  // upgrade_d7_field migration. In this case we only want to migrate the fields
+  // that are used by our Drupal 7 blog_post content type, and not all the
+  // fields defined on our Drupal 7 site. So for each row in the Drupal 7 fields
+  // list we compare it against a static list and tell the Migrate API to skip
+  // any that are not in our list.
+  // if ($migration->id() == 'dmeblog_d7_field' || $migration->id() == 'dmeblog_d7_field_instance') {
+  //   // Drupal 7 field names for all the fields we know we DO want to migrate.
+  //   $blog_fields = [
+  //     'field_blog_post_images',
+  //     'field_blog_post_files',
+  //     'field_planet',
+  //     'taxonomy_blog_tags',
+  //   ];
+  //
+  //   // The `field_name` property here comes from the source plugin which defines
+  //   // the list of source fields.
+  //   // @see \Drupal\field\Plugin\migrate\source\d7\Field::fields()
+  //   if (!in_array($row->getSourceProperty('field_name'), $blog_fields)) {
+  //     // Skip this row by throwing a new MigrateSkipRowException exception.
+  //     // Using FALSE here also instructs the Migrate API to forgo creating an
+  //     // entry in the map table for this particular record instead of marking
+  //     // it as ignored. Either would work in this case, this method works for us
+  //     // since we don't really need to record that it was STATUS_IGNORED for any
+  //     // reason.
+  //     throw new MigrateSkipRowException('', TRUE);
+  //   }
+  // }
+}

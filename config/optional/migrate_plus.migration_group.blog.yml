@@ -1,0 +1,16 @@
+langcode: en
+status: true
+# We add an enforced dependency so the migration_group configuration will be
+# removed on module uninstall.
+dependencies:
+  enforced:
+    module:
+      - migrate_uwfblog
+id: blog
+label: 'UWF Blog'
+description: 'Configuration and content from the Drupal 7 UW Facilities Blog.'
+source_type: 'Drupal 7'
+module: migrate_uwfblog
+shared_configuration:
+  source:
+    key: d7_blog

@@ -1,0 +1,77 @@
+langcode: en
+status: true
+dependencies: {  }
+id: blog_d7_file_entity_video_oembed
+class: Drupal\migrate\Plugin\Migration
+field_plugin_method: null
+cck_plugin_method: null
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - 'Media Migration'
+  - 'Media Entity'
+migration_group: blog
+label: 'File Entity migration (Video (oembed))'
+source:
+  plugin: d7_file_entity_item
+  type: video
+  scheme: oembed
+  types: video
+  schemes: oembed
+  destination_media_type_id: video_oembed
+  source_field_name: field_media_video_file_oembed
+  source_field_migration_id: 'd7_file_entity_source_field_config:video_oembed'
+  media_migration_original_id: 'd7_file_entity:video:oembed'
+process:
+  uuid:
+    -
+      plugin: media_migrate_uuid
+      source: fid
+  mid:
+    -
+      plugin: get
+      source: fid
+  uid:
+    -
+      plugin: migration_lookup
+      migration: blog_d7_user
+      source: uid
+    -
+      plugin: default_value
+      default_value: 1
+  bundle:
+    -
+      plugin: get
+      source: bundle
+  name:
+    -
+      plugin: get
+      source: filename
+  created:
+    -
+      plugin: get
+      source: timestamp
+  status:
+    -
+      plugin: get
+      source: status
+  field_media_video_file_oembed/target_id:
+    -
+      plugin: get
+      source: fid
+  field_media_video_file_oembed/display:
+    -
+      plugin: get
+      source: display
+  field_media_video_file_oembed/description:
+    -
+      plugin: get
+      source: description
+destination:
+  plugin: 'entity:media'
+migration_dependencies:
+  required:
+    - blog_d7_file_entity_type_video_oembed
+    - blog_d7_file_entity_source_field_config_video_oembed
+  optional:
+    - blog_d7_user
