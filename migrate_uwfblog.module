@@ -81,6 +81,19 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   // }
   switch ($migration->id()) {
 
+    // case 'blog_d7_url_alias':
+    //   $alias = $row->getSourceProperty('alias');
+    //   if ($debug) {
+    //     throw new MigrateSkipRowException('Debugging: would have created alias ' . $alias, TRUE);
+    //   }
+    //   break;
+
+    case 'blog_d7_node_complete_fsblog':
+      $alias = $row->getSourceProperty('alias');
+      if ($debug) {
+        throw new MigrateSkipRowException('Debugging: would have created alias ' . $alias, TRUE);
+      }
+      break;
     // Customize field definitions
     case 'blog_d7_field':
       $field_name = $row->getSourceProperty('field_name');

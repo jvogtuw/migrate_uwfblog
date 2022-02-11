@@ -11,7 +11,7 @@ migration_tags:
 migration_group: blog
 label: 'Node complete (Page)'
 source:
-  plugin: d7_node_complete
+  plugin: d7_node_complete_plus
   node_type: page
 process:
   nid:
@@ -55,6 +55,11 @@ process:
     -
       plugin: get
       source: sticky
+  path/pathauto:
+    plugin: default_value
+    default_value: 0 # disable pathauto for this node.
+  path/alias: alias
+
   revision_uid:
     -
       plugin: get
@@ -83,6 +88,7 @@ process:
       plugin: media_wysiwyg_filter
     -
       plugin: img_tag_to_embed
+  published_at: published_at
 #  field_page_related_entity:
 #    -
 #      plugin: get

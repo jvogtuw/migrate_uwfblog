@@ -11,7 +11,7 @@ migration_tags:
 migration_group: blog
 label: 'Node complete (Facilities blog post)'
 source:
-  plugin: d7_node_complete
+  plugin: d7_node_complete_plus
   node_type: fsblog
 process:
   nid: tnid
@@ -29,18 +29,29 @@ process:
   status: status
   created: created
   changed: timestamp
-  promote: promote
+  promote:
+    -
+      plugin: get
+      source: field_fsblog_highlight
+    -
+      plugin: default_value
+      default_value: 0
   sticky: sticky
   revision_uid: revision_uid
   revision_log: log
-  revision_timestamp:  timestamp
+  revision_timestamp: timestamp
   content_translation_source: source_langcode
+  path/pathauto:
+    plugin: default_value
+    default_value: 0 # disable pathauto for this node.
+  path/alias: alias
+  published_at: published_at
 #  comment_node_fsblog/0/status:
 #    -
 #      plugin: get
 #      source: comment
   field_fsblog_subheading: field_fsblog_subheading
-  field_fsblog_highlight: field_fsblog_highlight
+#  field_fsblog_highlight: field_fsblog_highlight
   field_fsblog_tags:
     -
       plugin: sub_process
