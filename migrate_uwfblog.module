@@ -1,4 +1,14 @@
 <?php
+/**
+ * @file
+ * This file contains hook implementations for the UWF Blog migration.
+ *
+ * ***********************
+ * ****** IMPORTANT ******
+ * ***********************
+ *
+ * See README.md for instructions and caveats.
+ */
 
 use Drupal\migrate\MigrateSkipRowException;
 use Drupal\migrate\Plugin\MigrateSourceInterface;
@@ -10,8 +20,6 @@ use Drupal\migrate\Row;
  *
  * This function will be called once for every row in every migration.
  *
- * We recommend at a minimum always checking the $migration->id() value to see
- * which migration is currently being executed.
  *
  * @see https://drupalize.me/tutorial/use-hookmigratepreparerow?p=2578 for more
  *   info.
@@ -19,6 +27,41 @@ use Drupal\migrate\Row;
 function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   $debug = FALSE;
 
+  // Exclude elements from the source site that we don't want to migrate.
+  $excluded_fields = [
+    'comment_body',
+    'field_fsblog_p_class', // Temporarily?
+    'field_fsblog_highlight', // Replaced with 'Promoted' checkbox
+    'field_page_related_entity',
+    'field_fsblog_p_class',
+    // 'field_fsblog_post_content', // Temporarily
+    'field_image',
+    'field_tags',
+    'field_unit_abbreviation', // From fs_units vocab
+    'field_fsblog_unit',
+  ];
+  $excluded_entity_types = [
+    'comment',
+  ];
+  $excluded_bundles = [
+    'article', // Remnants from this content type being deleted
+    'panel',
+    'fs_units',
+  ];
+  $excluded_view_modes = [
+    'fs_search_result',
+    'fs_blog_slideshow',
+    'fsblog_tile',
+    'hero_image',
+    'hero_image_thumb',
+    'image_inline',
+    'image_left',
+    'image_only',
+    'image_right',
+  ];
+
+  // We want to change the IDs for some elements. Here we map the old (source)
+  // name to the new (destination) name.
   $field_name_map = [
     'field_fsblog_p_image' => 'field_p_isec_image',
     'field_fsblog_p_title' => 'field_p_csec_title',
@@ -35,52 +78,40 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'field_last_name' => 'field_user_last_name',
     'field_file_image_description' => 'field_media_descriptive_text'
   ];
-
   $bundle_map = [
     'fsblog' => 'post',
     'fsblog_section' => 'content_section',
     'fsblog_full_image' => 'image_section',
-    'fs_units' => 'units',
+    // 'fs_units' => 'units',
   ];
 
-  $excluded_fields = [
-    'comment_body',
-    'field_fsblog_p_class', // Temporarily
-    'field_fsblog_highlight', // Replace with 'Promoted' checkbox
-    'field_page_related_entity',
-    'field_fsblog_p_class',
-    // 'field_fsblog_post_content', // Temporarily
-    'field_image',
-    'field_tags'
-  ];
-
-  $excluded_entity_types = [
-    'comment',
-  ];
-
-  $excluded_bundles = [
-    'article', // Remnants from this content type being deleted
-  ];
-
-  $excluded_view_modes = [
-    'fs_search_result',
-    'fs_blog_slideshow',
-    'fsblog_tile',
-    'hero_image',
-    'hero_image_thumb',
-    'image_inline',
-    'image_left',
-    'image_only',
-    'image_right',
-  ];
 
   // TEMP COMMENT OUT
   // if ($debug && ($row->hasSourceProperty('view_mode') || $row->hasDestinationProperty('view_mode'))) {
   //   $view_mode = $row->getSourceProperty('view_mode') ?? $row->getDestinationProperty('view_mode');
   //   throw new MigrateSkipRowException('Debugging: view mode is ' . $view_mode, TRUE);
   // }
-  switch ($migration->id()) {
 
+  // Change select bundle IDs wherever they occur in the source data. This
+  // excludes bundle creation which is handled in the blog_d7_node_type.
+  // if ($row->hasSourceProperty('bundle')) {
+  //   $bundle = $row->getSourceProperty('bundle');
+  //   if (array_key_exists($bundle, $bundle_map)) {
+  //     $row->setSourceProperty('bundle', $bundle_map[$bundle]);
+  //   }
+  // }
+  // if ($row->hasSourceProperty('instances')) {
+  //   $instances = $row->getSourceProperty('instances');
+  //   $bundle = $instances[0]['bundle'];
+  //   if (array_key_exists($bundle, $bundle_map)) {
+  //     $row->setSourceProperty('instances', $bundle_map[$bundle]);
+  //   }
+  // }
+
+  switch ($migration->id()) {
+    case 'blog_d7_pathauto_patterns':
+      dpm($row, 'row');
+      break;
     // case 'blog_d7_url_alias':
     //   $alias = $row->getSourceProperty('alias');
     //   if ($debug) {
@@ -115,7 +146,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // }
 
       // TEMP COMMENT OUT
-      // Update associated bundles.
+      // Change ID for associated bundles.
       // $instances = $row->getSourceProperty('instances');
       // $bundle = $instances[0]['bundle'];
       // if (array_key_exists($bundle, $bundle_map)) {
@@ -146,7 +177,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $node_bundle = $row->getSourceProperty('type');
 
       // Skip unwanted bundles
-      if ($node_bundle == 'panel') {
+      if (in_array($node_bundle, $excluded_bundles)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
 
@@ -156,10 +187,10 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
       // TEMP COMMENT OUT
       // Rename some node types
-      // if (array_key_exists($node_bundle, $bundle_map)) {
-      //   $row->setSourceProperty('type', $bundle_map[$node_bundle]);
-      // }
-      // break;
+      if (array_key_exists($node_bundle, $bundle_map)) {
+        $row->setSourceProperty('type', $bundle_map[$node_bundle]);
+      }
+      break;
 
     // Customize paragraph type definitions
     case 'blog_d7_paragraphs_type':
@@ -219,8 +250,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // }
 
       // TEMP COMMENT OUT
-      // Update bundle
-      // $bundle = $row->getSourceProperty('bundle');
+      // Change ID for associated bundles.
       // if (array_key_exists($bundle, $bundle_map)) {
       //   $row->setSourceProperty('bundle', $bundle_map[$bundle]);
       // }
@@ -403,32 +433,4 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     }
   }
 
-  // This example performs some extra processing when running the
-  // upgrade_d7_field migration. In this case we only want to migrate the fields
-  // that are used by our Drupal 7 blog_post content type, and not all the
-  // fields defined on our Drupal 7 site. So for each row in the Drupal 7 fields
-  // list we compare it against a static list and tell the Migrate API to skip
-  // any that are not in our list.
-  // if ($migration->id() == 'dmeblog_d7_field' || $migration->id() == 'dmeblog_d7_field_instance') {
-  //   // Drupal 7 field names for all the fields we know we DO want to migrate.
-  //   $blog_fields = [
-  //     'field_blog_post_images',
-  //     'field_blog_post_files',
-  //     'field_planet',
-  //     'taxonomy_blog_tags',
-  //   ];
-  //
-  //   // The `field_name` property here comes from the source plugin which defines
-  //   // the list of source fields.
-  //   // @see \Drupal\field\Plugin\migrate\source\d7\Field::fields()
-  //   if (!in_array($row->getSourceProperty('field_name'), $blog_fields)) {
-  //     // Skip this row by throwing a new MigrateSkipRowException exception.
-  //     // Using FALSE here also instructs the Migrate API to forgo creating an
-  //     // entry in the map table for this particular record instead of marking
-  //     // it as ignored. Either would work in this case, this method works for us
-  //     // since we don't really need to record that it was STATUS_IGNORED for any
-  //     // reason.
-  //     throw new MigrateSkipRowException('', TRUE);
-  //   }
-  // }
 }

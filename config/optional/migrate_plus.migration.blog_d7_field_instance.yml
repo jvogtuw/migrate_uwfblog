@@ -8,6 +8,7 @@ cck_plugin_method: null
 migration_tags:
   - 'Drupal 7'
   - Configuration
+  - fields
 migration_group: blog
 label: 'Field instance configuration'
 source:
@@ -36,10 +37,7 @@ process:
         field_collection_item: paragraph
         paragraphs_item: paragraph
       bypass: true
-  field_name:
-    -
-      plugin: get
-      source: field_name
+  field_name: field_name
   bundle_mapped:
     -
       plugin: static_map
@@ -47,6 +45,8 @@ process:
       bypass: true
       map:
         comment_node_forum: comment_forum
+        fsblog: post
+#        fs_units: units
   bundle:
     0:
       plugin: field_bundle
@@ -60,22 +60,10 @@ process:
       process:
         plugin: substr
         start: 6
-  label:
-    -
-      plugin: get
-      source: label
-  description:
-    -
-      plugin: get
-      source: description
-  required:
-    -
-      plugin: get
-      source: required
-  status:
-    -
-      plugin: get
-      source: constants/status
+  label: label
+  description: description
+  required: required
+  status: constants/status
   allowed_values:
     -
       plugin: sub_process
@@ -96,20 +84,14 @@ process:
       plugin: media_image_field_instance_settings
     paragraphs:
       plugin: paragraphs_field_instance_settings
-  default_value_function:
-    -
-      plugin: get
-      source: ''
+  default_value_function: ''
   default_value:
     -
       plugin: d7_field_instance_defaults
       source:
         - default_value
         - widget
-  translatable:
-    -
-      plugin: get
-      source: translatable
+  translatable: translatable
   settings/title:
     -
       plugin: static_map

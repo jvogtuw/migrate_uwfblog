@@ -22,10 +22,7 @@ process:
       source: language
       default_value: und
   title: title
-  uid:
-    -
-      plugin: get
-      source: node_uid
+  uid: node_uid
   status: status
   created: created
   changed: timestamp
@@ -160,12 +157,12 @@ process:
 #       process:
 #         target_id: '0'
 #         target_revision_id: '1'
-  field_fsblog_unit:
-    -
-      plugin: sub_process
-      source: field_fsblog_unit
-      process:
-        target_id: tid
+#  field_fsblog_unit:
+#    -
+#      plugin: sub_process
+#      source: field_fsblog_unit
+#      process:
+#        target_id: tid
 destination:
   plugin: 'entity_complete:node'
   translations: true

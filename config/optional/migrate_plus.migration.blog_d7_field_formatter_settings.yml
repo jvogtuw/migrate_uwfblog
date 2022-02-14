@@ -8,6 +8,7 @@ cck_plugin_method: null
 migration_tags:
   - 'Drupal 7'
   - Configuration
+  - fields
 migration_group: blog
 label: 'Field formatter configuration'
 source:
@@ -45,6 +46,18 @@ process:
         field_collection_item: paragraph
         paragraphs_item: paragraph
       bypass: true
+  bundle_mapped:
+    -
+      plugin: migration_lookup
+      migration: blog_d7_field_instance
+      source:
+        - entity_type
+        - bundle
+        - field_name
+    -
+      plugin: extract
+      index:
+        - 1
   bundle:
     0:
       plugin: migration_lookup
@@ -54,9 +67,15 @@ process:
         - bundle
         - field_name
     1:
-      plugin: extract
-      index:
-        - 1
+#      plugin: extract
+#      index:
+#        - 1
+      plugin: static_map
+      source: '@bundle_mapped'
+      bypass: true
+      map:
+        fsblog: post
+#        fs_units: units
     paragraphs:
       plugin: paragraphs_process_on_value
       source_value: entity_type

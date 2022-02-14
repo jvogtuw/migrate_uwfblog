@@ -16,8 +16,14 @@ source:
 process:
   vid:
     -
-      plugin: make_unique_entity_field
+      plugin: static_map
       source: machine_name
+      bypass: true
+      map:
+        fs_units: units
+    -
+      plugin: make_unique_entity_field
+#      source: machine_name
       entity_type: taxonomy_vocabulary
       field: vid
       length: 30
@@ -25,22 +31,10 @@ process:
     -
       plugin: forum_vocabulary
       machine_name: forums
-  label:
-    -
-      plugin: get
-      source: name
-  name:
-    -
-      plugin: get
-      source: name
-  description:
-    -
-      plugin: get
-      source: description
-  weight:
-    -
-      plugin: get
-      source: weight
+  label: name
+  name: name
+  description: description
+  weight: weight
 destination:
   plugin: 'entity:taxonomy_vocabulary'
 migration_dependencies:
