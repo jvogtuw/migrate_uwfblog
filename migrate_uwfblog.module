@@ -215,6 +215,11 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     case 'blog_d7_taxonomy_vocabulary':
       $vocabulary = $row->getSourceProperty('machine_name');
 
+      // Skip unwanted bundles
+      if (in_array($vocabulary, $excluded_bundles)) {
+        throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
+      }
+
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created ' . $vocabulary, TRUE);
       }
