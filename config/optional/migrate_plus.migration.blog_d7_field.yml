@@ -33,14 +33,8 @@ process:
         field_collection_item: paragraph
         paragraphs_item: paragraph
       bypass: true
-  status:
-    -
-      plugin: get
-      source: constants/status
-  langcode:
-    -
-      plugin: get
-      source: constants/langcode
+  status: constants/status
+  langcode: constants/langcode
   field_name:
     -
       plugin: get
@@ -63,10 +57,7 @@ process:
           list: list
         link_field:
           link_field: link_field
-  cardinality:
-    -
-      plugin: get
-      source: cardinality
+  cardinality: cardinality
   settings:
     0:
       plugin: d7_field_settings
