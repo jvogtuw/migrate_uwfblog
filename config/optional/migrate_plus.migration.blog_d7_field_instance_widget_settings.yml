@@ -18,11 +18,23 @@ source:
     third_party_settings: {  }
   mapMigrationProcessValueToMedia: true
 process:
+  field_name_mapped:
+    - plugin: static_map
+      source: field_name
+      bypass: true
+      map:
+        field_fsblog_subheading: field_post_subtitle
+        field_fsblog_tags: field_post_tags
+        field_fsblog_hero: field_post_hero
+        field_fsblog_hero_thumb: field_post_hero_thumb
+#        field_fsblog_lede: field_post_lede
+#        field_fsblog_post_content: field_post_content
   field_type_exists:
     -
       plugin: migration_lookup
       migration: blog_d7_field
       source:
+#        - '@field_name_mapped'
         - field_name
         - entity_type
     -
@@ -33,13 +45,16 @@ process:
       plugin: skip_on_empty
       method: row
   bundle_mapped:
-    - plugin: migration_lookup
+    -
+      plugin: migration_lookup
       migration: blog_d7_field_instance
       source:
         - entity_type
         - bundle
+#        - '@field_name_mapped'
         - field_name
-    - plugin: extract
+    -
+      plugin: extract
       index:
         - 1
   bundle:
@@ -49,6 +64,7 @@ process:
       source:
         - entity_type
         - bundle
+#        - '@field_name_mapped'
         - field_name
     1:
 #      plugin: extract
@@ -68,7 +84,7 @@ process:
         plugin: substr
         start: 6
   form_mode: constants/form_mode
-  field_name: field_name
+  field_name: '@field_name_mapped'
   entity_type:
     0:
       plugin: get

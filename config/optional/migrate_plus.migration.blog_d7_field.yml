@@ -37,8 +37,18 @@ process:
   langcode: constants/langcode
   field_name:
     -
-      plugin: get
+      plugin: static_map
       source: field_name
+      bypass: true
+      map:
+        field_fsblog_subheading: field_post_subtitle
+        field_fsblog_tags: field_post_tags
+        field_fsblog_hero: field_post_hero
+        field_fsblog_hero_thumb: field_post_hero_thumb
+#        field_fsblog_lede: field_post_lede
+#        field_fsblog_post_content: field_post_content
+#      plugin: get
+#      source: field_name
   type:
     -
       plugin: process_field

@@ -17,11 +17,24 @@ source:
     third_party_settings: {  }
   mapMigrationProcessValueToMedia: true
 process:
+  field_name_mapped:
+    -
+      plugin: static_map
+      source: field_name
+      bypass: true
+      map:
+        field_fsblog_subheading: field_post_subtitle
+        field_fsblog_tags: field_post_tags
+        field_fsblog_hero: field_post_hero
+        field_fsblog_hero_thumb: field_post_hero_thumb
+#        field_fsblog_lede: field_post_lede
+#        field_fsblog_post_content: field_post_content
   field_type_exists:
     -
       plugin: migration_lookup
       migration: blog_d7_field
       source:
+#        - '@field_name_mapped'
         - field_name
         - entity_type
     -
@@ -53,6 +66,7 @@ process:
       source:
         - entity_type
         - bundle
+#        - '@field_name_mapped'
         - field_name
     -
       plugin: extract
@@ -65,6 +79,7 @@ process:
       source:
         - entity_type
         - bundle
+#        - '@field_name_mapped'
         - field_name
     1:
 #      plugin: extract
@@ -99,18 +114,9 @@ process:
       bypass: true
       map:
         full: default
-  field_name:
-    -
-      plugin: get
-      source: field_name
-  options/label:
-    -
-      plugin: get
-      source: formatter/label
-  options/weight:
-    -
-      plugin: get
-      source: formatter/weight
+  field_name: '@field_name_mapped'
+  options/label: formatter/label
+  options/weight: formatter/weight
   plugin_id:
     -
       plugin: process_field
@@ -186,10 +192,7 @@ process:
       plugin: default_value
       source: formatter/settings
       default_value: {  }
-  options/third_party_settings:
-    -
-      plugin: get
-      source: constants/third_party_settings
+  options/third_party_settings: constants/third_party_settings
   options/settings/view_mode:
     paragraphs:
       plugin: paragraphs_process_on_value
