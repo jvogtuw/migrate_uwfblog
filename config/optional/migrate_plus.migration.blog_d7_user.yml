@@ -77,11 +77,15 @@ process:
       source: roles
       map:
         3: administrator
+        # Formerly UWF comm
         5: 'editor'
+        # Formerly UWF comm admin
         6: 'content_manager'
         7: 'contributor'
-        # Rid different in prod
+        # Content admin role ID in dev
         9: 'content_admin'
+        # Content admin role ID in test, prod
+        10: 'content_admin'
 #      plugin: migration_lookup
 #      migration: blog_d7_user_role
 #      source: roles
