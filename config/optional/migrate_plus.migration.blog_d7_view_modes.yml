@@ -42,6 +42,7 @@ process:
       plugin: static_map
       map:
         file: media
+        fsblog: post
       bypass: true
     paragraphs:
       plugin: static_map
