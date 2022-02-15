@@ -47,15 +47,15 @@ process:
 #    -
 #      plugin: get
 #      source: comment
-  field_fsblog_subheading: field_fsblog_subheading
+  field_post_subtitle: field_fsblog_subheading
 #  field_fsblog_highlight: field_fsblog_highlight
-  field_fsblog_tags:
+  field_post_tags:
     -
       plugin: sub_process
       source: field_fsblog_tags
       process:
         target_id: tid
-  field_fsblog_hero:
+  field_post_hero:
     -
       plugin: media_migration_delta_sort
       source: field_fsblog_hero
@@ -63,7 +63,7 @@ process:
       plugin: sub_process
       process:
         target_id: fid
-  field_fsblog_hero_thumb:
+  field_post_hero_thumb:
     -
       plugin: media_migration_delta_sort
       source: field_fsblog_hero_thumb
@@ -166,7 +166,7 @@ process:
 destination:
   plugin: 'entity_complete:node'
   translations: true
-  default_bundle: fsblog
+  default_bundle: post
 migration_dependencies:
   required:
     - blog_d7_user
