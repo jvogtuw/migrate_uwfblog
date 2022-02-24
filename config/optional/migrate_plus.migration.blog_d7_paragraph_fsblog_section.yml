@@ -53,7 +53,6 @@ process:
 #      revision_id: revision_id
 destination:
   plugin: 'entity_reference_revisions:paragraph'
-  # Change this bundle if the bundle id is different in the destination site.
   default_bundle: content_section
 migration_dependencies:
   required: {}

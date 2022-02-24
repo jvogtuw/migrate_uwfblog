@@ -17,6 +17,8 @@ source:
   constants:
     langcode: 'und'
 #  key: migrate
+  #varies
+#  field_name: field_fsblog_post_content
 process:
   id: item_id
   revision_id: revision_id
@@ -48,6 +50,7 @@ process:
 #    revision_id: revision_id
 destination:
   plugin: 'entity_reference_revisions:paragraph'
+  # varies
   default_bundle: content_section
 migration_dependencies:
   required: {}
