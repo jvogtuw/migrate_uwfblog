@@ -13,6 +13,8 @@ label: 'Node complete (Facilities blog post)'
 source:
   plugin: d7_node_complete_plus
   node_type: fsblog
+  constants:
+    revision_translation_affected: '1'
 process:
   nid: tnid
   vid: vid
@@ -38,17 +40,17 @@ process:
   revision_log: log
   revision_timestamp: timestamp
   content_translation_source: source_langcode
+  # Force this setting to 1, otherwise revisions that only affect paragraphs
+  # won't show up on the node's revisions page. This may mess things up for
+  # sites that actually use translations, but this site doesn't.
+  revision_translation_affected: constants/revision_translation_affected
   path/pathauto:
     plugin: default_value
     default_value: 0 # disable pathauto for this node.
   path/alias: alias
   published_at: published_at
-#  comment_node_fsblog/0/status:
-#    -
-#      plugin: get
-#      source: comment
   field_post_subtitle: field_fsblog_subheading
-#  field_fsblog_highlight: field_fsblog_highlight
+  field_post_archived: '1'
   field_post_tags:
     -
       plugin: sub_process
@@ -71,7 +73,7 @@ process:
       plugin: sub_process
       process:
         target_id: fid
-  field_fsblog_lede:
+  field_post_lede:
     plugin: sub_process
     source: field_fsblog_lede
     process:
@@ -79,8 +81,6 @@ process:
         - plugin: migration_lookup
           migration:
             - blog_d7_paragraph_fsblog_section
-#            - paragraph_grid
-#            - paragraph_text_embedded
           source: value
         - plugin: extract
           index:
@@ -89,38 +89,54 @@ process:
         - plugin: migration_lookup
           migration:
             - blog_d7_paragraph_fsblog_section
-          #            - paragraph_grid
-          #            - paragraph_text_embedded
           source: value
         - plugin: extract
           index:
             - 1
-#    -
-#      plugin: skip_on_empty
-#      method: process
-#      # varies
-#      source: field_fsblog_lede
-#    -
-#      plugin: migration_lookup
-#      # varies
-#      migration: blog_d7_paragraph_fsblog_section
-#      no_stub: true
-#    -
-#      plugin: sub_process
-#      process:
-#        target_id: '0'
-#        target_revision_id: '1'
-  field_fsblog_post_content:
+  # Grab the paragraph entity ID from field_fsblog_lede. The field only allows
+  # one paragraph, so the ID is the same for all revisions.
+  lede_target_id:
+    - plugin: sub_process
+      source: field_fsblog_lede
+      process:
+        target_id:
+          - plugin: migration_lookup
+            migration:
+              - blog_d7_paragraph_fsblog_section
+            source: value
+          - plugin: extract
+            index:
+              - 0
+    - plugin: extract
+      index:
+        - 0
+        - target_id
+  # Use the paragraph's entity ID to grab the value of field_content_section_body.
+  # It appears to grab the latest revision. Needs testing.
+  abstract:
+    -
+      plugin: entity_value
+      source:
+        - '@lede_target_id'
+      entity_type: paragraph
+      field_name: field_content_section_body
+    -
+      plugin: extract
+      index:
+        - 0
+
+  'field_post_abstract/value':
+    plugin: extract
+    source: '@abstract'
+    index:
+      - 0
+      - value
+  # Todo: Change this to a different format
+  'field_post_abstract/format': 'full_html'
+  field_post_content:
     plugin: sub_process
     source: field_fsblog_post_content
     process:
-#      paragraph_ids:
-#        plugin: migration_lookup
-#        migration:
-#          - blog_d7_paragraph_fsblog_section
-#          - blog_d7_paragraph_fsblog_full_image
-#        no_stub: true
-#        source: npp
       target_id:
         - plugin: migration_lookup
           migration:
@@ -139,30 +155,6 @@ process:
         - plugin: extract
           index:
             - 1
-#    -
-#      plugin: get
-#      source: field_fsblog_post_content
-#     -
-#       plugin: skip_on_empty
-#       method: process
-#       # varies
-#       source: field_fsblog_post_content
-#     -
-#       plugin: migration_lookup
-#       # varies
-#       migration: d7_paragraph_branch
-#       no_stub: true
-#     -
-#       plugin: sub_process
-#       process:
-#         target_id: '0'
-#         target_revision_id: '1'
-#  field_fsblog_unit:
-#    -
-#      plugin: sub_process
-#      source: field_fsblog_unit
-#      process:
-#        target_id: tid
 destination:
   plugin: 'entity_complete:node'
   translations: true

@@ -9,6 +9,7 @@ migration_tags:
   - 'Drupal 7'
   - Configuration
   - 'Entity types'
+  - prefield
 migration_group: blog
 label: 'Taxonomy vocabularies'
 source:

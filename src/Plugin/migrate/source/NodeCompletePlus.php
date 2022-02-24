@@ -20,6 +20,7 @@ class NodeCompletePlus extends D7NodeComplete {
    */
   public function query() {
     $query = parent::query();
+    $query->addField('n', 'vid', 'current_vid');
 
     // Add the published date if available. Requires the publication_date module.
     if ($this->getDatabase()->schema()->tableExists('publication_date')) {
@@ -28,6 +29,7 @@ class NodeCompletePlus extends D7NodeComplete {
     }
 
     // Add the URL alias if available. Requires the path module.
+    $original_alias = NULL;
     if ($this->getDatabase()->schema()->tableExists('url_alias')) {
       $query->leftJoin('url_alias', 'ua', '[ua].[source] = CONCAT(\'node/\', [nr].[nid])');
       $query->addField('ua', 'alias', 'original_alias');
@@ -42,6 +44,7 @@ class NodeCompletePlus extends D7NodeComplete {
     $additional_fields = [
       'alias' => $this->t('Path alias'),
       'published_at' => $this->t('Publication date'),
+      'current_vid' => $this->t('Current vid'),
     ];
     // return ['alias' => $this->t('Path alias')] + parent::fields();
     return $additional_fields + parent::fields();
@@ -51,13 +54,14 @@ class NodeCompletePlus extends D7NodeComplete {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
-
     // Prepend the original alias for Drupal 9 compatibility. Couldn't figure
     // out how to do this in the query
     $original_alias = $row->getSourceProperty('original_alias');
-    if (!empty($original_alias)) {
-      $row->setSourceProperty('alias', '/' . $original_alias);
-    }
+    $alias = (!empty($original_alias) && $row->getSourceProperty('vid') == $row->getSourceProperty('current_vid')) ? '/' . $original_alias : NULL;
+    $row->setSourceProperty('alias', $alias);
+    // if (!empty($original_alias) && $row->getSourceProperty('vid') && $row->getSourceProperty('current_vid')) {
+    //   $row->setSourceProperty('alias', '/' . $original_alias);
+    // }
 
     return parent::prepareRow($row);
   }

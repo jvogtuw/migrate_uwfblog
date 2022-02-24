@@ -5,7 +5,9 @@ package: Custom migrations
 core_version_requirement: ^8 || ^9
 
 dependencies:
+  - datetime_range
+  - media_migration
+  - media_migration_tools
   - migrate_plus
   - migrate_tools
-  - media_migration
-  - datetime_range
+  - publication_date

@@ -51,10 +51,17 @@ Caveats
    Drupal\pathauto\Plugin\migrate\source\PathautoPattern, just create the 'post'
    pattern manually.
 
-2)
+2) Rolling back the paragraph item content migrations won't delete the paragraph
+   items (probably because we're changing the bundle name, but I'm not sure).
+   Running cron will delete some/all of them. If there are any left over, use
+   views bulk operations or custom code to delete them.
 
 
 After migration
 ---------------
 
 1) After the migrations are complete, reenable transliterate_filenames.
+2) Delete or at least hide the field_post_lede on Blog post nodes. It was only
+   created to make it easier to copy the contents of its body field to the new
+   field_post_abstract.
+

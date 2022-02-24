@@ -10,6 +10,7 @@ migration_tags:
   - Configuration
   - 'Media Migration'
   - 'Media Configuration'
+  - prefield
 migration_group: blog
 label: 'Media view modes'
 source:

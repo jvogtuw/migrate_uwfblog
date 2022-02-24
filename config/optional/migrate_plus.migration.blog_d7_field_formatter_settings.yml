@@ -27,14 +27,16 @@ process:
         field_fsblog_tags: field_post_tags
         field_fsblog_hero: field_post_hero
         field_fsblog_hero_thumb: field_post_hero_thumb
-#        field_fsblog_lede: field_post_lede
-#        field_fsblog_post_content: field_post_content
+        field_fsblog_lede: field_post_lede
+        field_fsblog_post_content: field_post_content
+        field_fsblog_p_image: field_content_section_image
+        field_fsblog_p_title: field_content_section_title
+        field_fsblog_p_body: field_content_section_body
   field_type_exists:
     -
       plugin: migration_lookup
       migration: blog_d7_field
       source:
-#        - '@field_name_mapped'
         - field_name
         - entity_type
     -
@@ -66,7 +68,6 @@ process:
       source:
         - entity_type
         - bundle
-#        - '@field_name_mapped'
         - field_name
     -
       plugin: extract
@@ -79,7 +80,6 @@ process:
       source:
         - entity_type
         - bundle
-#        - '@field_name_mapped'
         - field_name
     1:
 #      plugin: extract
@@ -90,6 +90,8 @@ process:
       bypass: true
       map:
         fsblog: post
+        fsblog_section: content_section
+        fsblog_full_image: content_section
 #        fs_units: units
     paragraphs:
       plugin: paragraphs_process_on_value

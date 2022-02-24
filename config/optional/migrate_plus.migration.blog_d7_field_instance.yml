@@ -47,8 +47,11 @@ process:
         field_fsblog_tags: field_post_tags
         field_fsblog_hero: field_post_hero
         field_fsblog_hero_thumb: field_post_hero_thumb
-#        field_fsblog_lede: field_post_lede
-#        field_fsblog_post_content: field_post_content
+        field_fsblog_lede: field_post_lede
+        field_fsblog_post_content: field_post_content
+        field_fsblog_p_image: field_content_section_image
+        field_fsblog_p_title: field_content_section_title
+        field_fsblog_p_body: field_content_section_body
   bundle_mapped:
     -
       plugin: static_map
@@ -57,6 +60,8 @@ process:
       map:
         comment_node_forum: comment_forum
         fsblog: post
+        fsblog_section: content_section
+        fsblog_full_image: content_section
 #        fs_units: units
   bundle:
     0:
@@ -71,9 +76,16 @@ process:
       process:
         plugin: substr
         start: 6
-  label: label
+  label:
+    -
+      plugin: static_map
+      source: label
+      bypass: true
+      map:
+        'Subheading': 'Subtitle'
+#        'Lede': 'Abstract'
   description: description
-  required: required
+  required: '0'
   status: constants/status
   allowed_values:
     -
