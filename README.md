@@ -51,10 +51,19 @@ Caveats
    Drupal\pathauto\Plugin\migrate\source\PathautoPattern, just create the 'post'
    pattern manually.
 
-2) Rolling back the paragraph item content migrations won't delete the paragraph
-   items (probably because we're changing the bundle name, but I'm not sure).
-   Running cron will delete some/all of them. If there are any left over, use
-   views bulk operations or custom code to delete them.
+2) Rolling back the paragraph item content migrations doesn't always delete all
+   of the destination paragraph items. Running cron will delete some/all of
+   them. If there are any left over, use the delete orphans tool
+   (admin/config/system/delete-orphans), views bulk operations or custom code to
+   delete them.
+
+3) Running migrate update on the paragraph item migrations is not recommended
+   because it (sometimes?) throws errors when changes are found. Something
+   about trying to change the revision ID.
+
+4) If a lede paragraph changes in the source, you'll need to rollback and rerun
+   both blog_d7_paragraph_fsblog_section and blog_d7_node_complete_fsblog, in
+   that order, to update the destination's field_post_abstract.
 
 
 After migration

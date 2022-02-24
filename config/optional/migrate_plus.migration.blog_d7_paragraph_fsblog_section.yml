@@ -14,6 +14,8 @@ label: 'Paragraph content: fsblog content section'
 source:
   plugin: d7_paragraphs_item
   bundle: fsblog_section
+  constants:
+    langcode: 'und'
 #  key: migrate
   #varies
 #  field_name: field_fsblog_post_content
@@ -21,7 +23,9 @@ process:
   id: item_id
   revision_id: revision_id
   field_name: field_name
-  #varies
+  # Force langcode to 'und'. The source site uses 'en' some places and 'und'
+  # in others and the content moderation module considers that a critical conflict.
+  langcode: constants/langcode
   field_content_section_title: field_fsblog_p_title
 #    plugin: sub_process
 #    # varies (field)

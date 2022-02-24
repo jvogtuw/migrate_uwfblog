@@ -14,14 +14,16 @@ label: 'Paragraph content: fsblog full image section'
 source:
   plugin: d7_paragraphs_item
   bundle: fsblog_full_image
+  constants:
+    langcode: 'und'
 #  key: migrate
-  #varies
-#  field_name: field_fsblog_post_content
 process:
   id: item_id
   revision_id: revision_id
   field_name: field_name
-  #varies
+  # Force langcode to 'und'. The source site uses 'en' some places and 'und'
+  # in others and the content moderation module considers that a critical conflict.
+  langcode: constants/langcode
   field_content_section_image:
     -
       plugin: media_migration_delta_sort
@@ -46,7 +48,6 @@ process:
 #    revision_id: revision_id
 destination:
   plugin: 'entity_reference_revisions:paragraph'
-  # varies
   default_bundle: content_section
 migration_dependencies:
   required: {}
