@@ -10,7 +10,7 @@ migration_tags:
   - 'Drupal 7'
   - Content
 migration_group: blog
-label: 'Paragraph content: fsblog full image section'
+label: 'Paragraph content (fsblog full image section)'
 source:
   plugin: d7_paragraphs_item
   bundle: fsblog_full_image

@@ -18,10 +18,7 @@ source:
   constants:
     entity_type_id: media
 process:
-  mode:
-    -
-      plugin: get
-      source: mode
+  mode: mode
   label_fallback:
     -
       plugin: static_map
@@ -41,10 +38,7 @@ process:
         - label
         - '@label_fallback'
         - mode
-  targetEntityType:
-    -
-      plugin: get
-      source: constants/entity_type_id
+  targetEntityType: constants/entity_type_id
 destination:
   plugin: 'entity:entity_view_mode'
 migration_dependencies:

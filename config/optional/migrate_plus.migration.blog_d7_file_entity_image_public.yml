@@ -27,10 +27,7 @@ process:
     -
       plugin: media_migrate_uuid
       source: fid
-  mid:
-    -
-      plugin: get
-      source: fid
+  mid: fid
   uid:
     -
       plugin: migration_lookup
@@ -39,22 +36,10 @@ process:
     -
       plugin: default_value
       default_value: 1
-  bundle:
-    -
-      plugin: get
-      source: bundle
-  name:
-    -
-      plugin: get
-      source: filename
-  created:
-    -
-      plugin: get
-      source: timestamp
-  status:
-    -
-      plugin: get
-      source: status
+  bundle: bundle
+  name: filename
+  created: timestamp
+  status: status
   field_caption:
     -
       plugin: get
@@ -75,38 +60,14 @@ process:
     -
       plugin: field_link
       source: field_file_image_desc_link
-  field_media_image/target_id:
-    -
-      plugin: get
-      source: fid
-  field_media_image/display:
-    -
-      plugin: get
-      source: display
-  field_media_image/description:
-    -
-      plugin: get
-      source: description
-  field_media_image/width:
-    -
-      plugin: get
-      source: width
-  field_media_image/height:
-    -
-      plugin: get
-      source: height
-  thumbnail/target_id:
-    -
-      plugin: get
-      source: fid
-  thumbnail/width:
-    -
-      plugin: get
-      source: width
-  thumbnail/height:
-    -
-      plugin: get
-      source: height
+  field_media_image/target_id: fid
+  field_media_image/display: display
+  field_media_image/description: description
+  field_media_image/width: width
+  field_media_image/height: height
+  thumbnail/target_id: fid
+  thumbnail/width: width
+  thumbnail/height: height
   alt_from_media:
     -
       plugin: skip_on_empty

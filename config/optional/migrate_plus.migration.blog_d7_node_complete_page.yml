@@ -14,68 +14,28 @@ source:
   plugin: d7_node_complete_plus
   node_type: page
 process:
-  nid:
-    -
-      plugin: get
-      source: tnid
-  vid:
-    -
-      plugin: get
-      source: vid
+  nid: tnid
+  vid: vid
   langcode:
     -
       plugin: default_value
       source: language
       default_value: und
-  title:
-    -
-      plugin: get
-      source: title
-  uid:
-    -
-      plugin: get
-      source: node_uid
-  status:
-    -
-      plugin: get
-      source: status
-  created:
-    -
-      plugin: get
-      source: created
-  changed:
-    -
-      plugin: get
-      source: timestamp
-  promote:
-    -
-      plugin: get
-      source: promote
-  sticky:
-    -
-      plugin: get
-      source: sticky
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: timestamp
+  promote: promote
+  sticky: sticky
   path/pathauto:
     plugin: default_value
     default_value: 0 # disable pathauto for this node.
   path/alias: alias
-
-  revision_uid:
-    -
-      plugin: get
-      source: revision_uid
-  revision_log:
-    -
-      plugin: get
-      source: log
-  revision_timestamp:
-    -
-      plugin: get
-      source: timestamp
-  content_translation_source:
-    -
-      plugin: get
-      source: source_langcode
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  content_translation_source: source_langcode
 #  comment_node_page/0/status:
 #    -
 #      plugin: get
@@ -89,10 +49,6 @@ process:
     -
       plugin: img_tag_to_embed
   published_at: published_at
-#  field_page_related_entity:
-#    -
-#      plugin: get
-#      source: field_page_related_entity
 destination:
   plugin: 'entity_complete:node'
   translations: true

@@ -27,10 +27,7 @@ process:
     -
       plugin: media_migrate_uuid
       source: fid
-  mid:
-    -
-      plugin: get
-      source: fid
+  mid: fid
   uid:
     -
       plugin: migration_lookup
@@ -39,34 +36,13 @@ process:
     -
       plugin: default_value
       default_value: 1
-  bundle:
-    -
-      plugin: get
-      source: bundle
-  name:
-    -
-      plugin: get
-      source: filename
-  created:
-    -
-      plugin: get
-      source: timestamp
-  status:
-    -
-      plugin: get
-      source: status
-  field_media_video_file_oembed/target_id:
-    -
-      plugin: get
-      source: fid
-  field_media_video_file_oembed/display:
-    -
-      plugin: get
-      source: display
-  field_media_video_file_oembed/description:
-    -
-      plugin: get
-      source: description
+  bundle: bundle
+  name: filename
+  created: timestamp
+  status: status
+  field_media_video_file_oembed/target_id: fid
+  field_media_video_file_oembed/display: display
+  field_media_video_file_oembed/description: description
 destination:
   plugin: 'entity:media'
 migration_dependencies:

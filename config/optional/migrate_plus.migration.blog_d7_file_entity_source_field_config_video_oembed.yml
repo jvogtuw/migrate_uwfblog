@@ -40,26 +40,11 @@ process:
       plugin: extract
       index:
         - 1
-  entity_type:
-    -
-      plugin: get
-      source: constants/entity_type_id
-  required:
-    -
-      plugin: get
-      source: constants/required
-  bundle:
-    -
-      plugin: get
-      source: bundle
-  label:
-    -
-      plugin: get
-      source: source_field_label
-  settings:
-    -
-      plugin: get
-      source: settings
+  entity_type: constants/entity_type_id
+  required: constants/required
+  bundle: bundle
+  label: source_field_label
+  settings: settings
 destination:
   plugin: 'entity:field_config'
 migration_dependencies:

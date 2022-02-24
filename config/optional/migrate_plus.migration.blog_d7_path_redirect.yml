@@ -13,18 +13,9 @@ label: 'Path Redirect'
 source:
   plugin: d7_path_redirect
 process:
-  rid:
-    -
-      plugin: get
-      source: rid
-  uid:
-    -
-      plugin: get
-      source: uid
-  redirect_source/path:
-    -
-      plugin: get
-      source: source
+  rid: rid
+  uid: uid
+  redirect_source/path: source
   redirect_source/query:
     -
       plugin: d7_redirect_source_query
@@ -40,10 +31,7 @@ process:
       plugin: default_value
       source: language
       default_value: und
-  status_code:
-    -
-      plugin: get
-      source: status_code
+  status_code: status_code
 destination:
   plugin: 'entity:redirect'
 migration_dependencies:

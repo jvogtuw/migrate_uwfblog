@@ -23,18 +23,9 @@ source:
   source_field_name: field_media_oembed_video
   media_migration_original_id: 'd7_file_entity_formatter:remote_video'
 process:
-  entity_type:
-    -
-      plugin: get
-      source: constants/entity_type_id
-  bundle:
-    -
-      plugin: get
-      source: bundle
-  view_mode:
-    -
-      plugin: get
-      source: constants/view_mode
+  entity_type: constants/entity_type_id
+  bundle: bundle
+  view_mode: constants/view_mode
   final_source_field_name:
     -
       plugin: migmag_compare
@@ -66,14 +57,8 @@ process:
       source:
         - '@final_source_field_name'
         - field_name
-  hidden:
-    -
-      plugin: get
-      source: hidden
-  options:
-    -
-      plugin: get
-      source: options
+  hidden: hidden
+  options: options
 destination:
   plugin: component_entity_display
 migration_dependencies:

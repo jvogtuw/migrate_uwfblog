@@ -16,34 +16,13 @@ source:
     status: true
     selection_logic: and
 process:
-  status:
-    -
-      plugin: get
-      source: constants/status
-  id:
-    -
-      plugin: get
-      source: id
-  label:
-    -
-      plugin: get
-      source: label
-  type:
-    -
-      plugin: get
-      source: type
-  pattern:
-    -
-      plugin: get
-      source: pattern
-  selection_criteria:
-    -
-      plugin: get
-      source: selection_criteria
-  selection_logic:
-    -
-      plugin: get
-      source: constants/selection_logic
+  status: constants/status
+  id: id
+  label: label
+  type: type
+  pattern: pattern
+  selection_criteria: selection_criteria
+  selection_logic: constants/selection_logic
 destination:
   plugin: 'entity:pathauto_pattern'
 migration_dependencies:

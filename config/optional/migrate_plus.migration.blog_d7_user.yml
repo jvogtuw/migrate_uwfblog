@@ -20,38 +20,14 @@ process:
       method: row
       value:
         - 1
-  name:
-    -
-      plugin: get
-      source: name
-  pass:
-    -
-      plugin: get
-      source: pass
-  mail:
-    -
-      plugin: get
-      source: mail
-  created:
-    -
-      plugin: get
-      source: created
-  access:
-    -
-      plugin: get
-      source: access
-  login:
-    -
-      plugin: get
-      source: login
-  status:
-    -
-      plugin: get
-      source: status
-  timezone:
-    -
-      plugin: get
-      source: timezone
+  name: name
+  pass: pass
+  mail: mail
+  created: created
+  access: access
+  login: login
+  status: status
+  timezone: timezone
   langcode:
     -
       plugin: user_langcode
@@ -67,10 +43,7 @@ process:
       plugin: user_langcode
       source: language
       fallback_to_site_default: true
-  init:
-    -
-      plugin: get
-      source: init
+  init: init
   roles:
       plugin: static_map
       bypass: true
@@ -97,14 +70,8 @@ process:
 #    -
 #      plugin: migration_lookup
 #      migration: blog_d7_file
-  field_first_name:
-    -
-      plugin: get
-      source: field_first_name
-  field_last_name:
-    -
-      plugin: get
-      source: field_last_name
+  field_first_name: field_first_name
+  field_last_name: field_last_name
 destination:
   plugin: 'entity:user'
 migration_dependencies:

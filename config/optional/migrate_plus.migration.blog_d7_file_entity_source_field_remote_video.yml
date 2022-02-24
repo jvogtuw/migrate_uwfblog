@@ -63,30 +63,12 @@ process:
       source:
         - '@new_field_name'
         - '@preexisting_field_name'
-  status:
-    -
-      plugin: get
-      source: constants/status
-  langcode:
-    -
-      plugin: get
-      source: constants/langcode
-  entity_type:
-    -
-      plugin: get
-      source: constants/entity_type_id
-  type:
-    -
-      plugin: get
-      source: field_type
-  cardinality:
-    -
-      plugin: get
-      source: constants/cardinality
-  settings:
-    -
-      plugin: get
-      source: settings
+  status: constants/status
+  langcode: constants/langcode
+  entity_type: constants/entity_type_id
+  type: field_type
+  cardinality: constants/cardinality
+  settings: settings
 destination:
   plugin: 'entity:field_storage_config'
 migration_dependencies:

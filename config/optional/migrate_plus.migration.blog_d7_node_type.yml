@@ -18,59 +18,23 @@ source:
     preview: 1
 process:
   type:
-#    -
-#      plugin: get
-#      source: type
     -
       plugin: static_map
       source: type
       bypass: true
       map:
         fsblog: post
-  name:
-    -
-      plugin: get
-      source: name
-  description:
-    -
-      plugin: get
-      source: description
-  help:
-    -
-      plugin: get
-      source: help
-  title_label:
-    -
-      plugin: get
-      source: title_label
-  preview_mode:
-    -
-      plugin: get
-      source: constants/preview
-  display_submitted:
-    -
-      plugin: get
-      source: display_submitted
-  new_revision:
-    -
-      plugin: get
-      source: options/revision
-  create_body:
-    -
-      plugin: get
-      source: create_body
-  create_body_label:
-    -
-      plugin: get
-      source: body_label
-  third_party_settings/menu_ui/available_menus:
-    -
-      plugin: get
-      source: available_menus
-  third_party_settings/menu_ui/parent:
-    -
-      plugin: get
-      source: parent
+  name: name
+  description: description
+  help: help
+  title_label: title_label
+  preview_mode: constants/preview
+  display_submitted: display_submitted
+  new_revision: options/revision
+  create_body: create_body
+  create_body_label: body_label
+  third_party_settings/menu_ui/available_menus: available_menus
+  third_party_settings/menu_ui/parent: parent
 destination:
   plugin: 'entity:node_type'
 migration_dependencies:

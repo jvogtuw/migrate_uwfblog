@@ -24,18 +24,9 @@ source:
   source_field_name: field_media_oembed_video
   media_migration_original_id: 'd7_file_entity_widget:remote_video'
 process:
-  entity_type:
-    -
-      plugin: get
-      source: constants/entity_type_id
-  bundle:
-    -
-      plugin: get
-      source: bundle
-  form_mode:
-    -
-      plugin: get
-      source: constants/form_mode
+  entity_type: constants/entity_type_id
+  bundle: bundle
+  form_mode: constants/form_mode
   field_name:
     -
       plugin: migration_lookup
@@ -53,10 +44,7 @@ process:
       plugin: extract
       index:
         - 1
-  options:
-    -
-      plugin: get
-      source: options
+  options: options
 destination:
   plugin: component_entity_form_display
 migration_dependencies:
