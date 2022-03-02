@@ -15,7 +15,7 @@ label: 'Node type configuration'
 source:
   plugin: d7_node_type
   constants:
-    preview: 1
+    preview: 0
 process:
   type:
     -

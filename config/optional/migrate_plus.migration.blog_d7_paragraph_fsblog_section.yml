@@ -12,7 +12,9 @@ migration_tags:
 migration_group: blog
 label: 'Paragraph content (fsblog content section)'
 source:
-  plugin: d7_paragraphs_item
+  plugin: d7_paragraphs_item_complete
+#  plugin: d7_paragraphs_item_revision
+#  plugin: d7_paragraphs_item
   bundle: fsblog_section
   constants:
     langcode: 'und'
@@ -21,36 +23,41 @@ source:
 #  field_name: field_fsblog_post_content
 process:
   id: item_id
+  revision: revision_id
   revision_id: revision_id
   field_name: field_name
   # Force langcode to 'und'. The source site uses 'en' some places and 'und'
   # in others and the content moderation module considers that a critical conflict.
   langcode: constants/langcode
-  field_content_section_title: field_fsblog_p_title
-#    plugin: sub_process
-#    # varies (field)
-#    source: field_fsblog_p_title
-#    process:
-#      value: value
-#    revision_id: revision_id
-  #varies
-  field_content_section_body:
-#    plugin: sub_process
-#    source: field_fsblog_p_body
-    -
-      plugin: map_text_format
-      source: field_fsblog_p_body
-    -
-      plugin: media_wysiwyg_filter
-    -
-      plugin: img_tag_to_embed
+#  field_content_section_title: field_fsblog_p_title
+  field_content_section_title:
+    plugin: sub_process
+    source: field_fsblog_p_title
+    process:
+      value: value
+    revision_id: revision_id
+
+#  field_content_section_body:
 #    -
-#      plugin: sub_process
-#      # varies (field)
-##      source: field_fsblog_p_body
-#      process:
-#        value: value
-#      revision_id: revision_id
+#      plugin: map_text_format
+#      source: field_fsblog_p_body
+#    -
+#      plugin: media_wysiwyg_filter
+#    -
+#      plugin: img_tag_to_embed
+  field_content_section_body:
+    -
+      plugin: sub_process
+      source: field_fsblog_p_body
+      process:
+        value: value
+      revision_id: revision_id
+#    -
+#      plugin: map_text_format
+#    -
+#      plugin: media_wysiwyg_filter
+#    -
+#      plugin: img_tag_to_embed
 destination:
   plugin: 'entity_reference_revisions:paragraph'
   default_bundle: content_section
