@@ -7,9 +7,9 @@ field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
   - 'Drupal 7'
-  - xContent
-migration_group: blog
-label: 'Taxonomy terms (FS units)'
+  - Content
+migration_group: not_blog
+label: 'Taxonomy terms (Units)'
 source:
   plugin: d7_taxonomy_term
   bundle: fs_units

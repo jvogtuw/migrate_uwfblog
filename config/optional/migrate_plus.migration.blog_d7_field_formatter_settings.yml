@@ -47,15 +47,15 @@ process:
       plugin: skip_on_empty
       method: row
   entity_type:
-    0:
+    -
       plugin: get
       source: entity_type
-    1:
+    -
       plugin: static_map
       map:
         file: media
       bypass: true
-    paragraphs:
+    -
       plugin: static_map
       map:
         field_collection_item: paragraph
@@ -93,13 +93,14 @@ process:
         fsblog_section: content_section
         fsblog_full_image: content_section
 #        fs_units: units
-    paragraphs:
-      plugin: paragraphs_process_on_value
-      source_value: entity_type
-      expected_value: field_collection_item
-      process:
-        plugin: substr
-        start: 6
+    # Removed after paragraphs update to 8.x-1.13
+#    paragraphs:
+#      plugin: paragraphs_process_on_value
+#      source_value: entity_type
+#      expected_value: field_collection_item
+#      process:
+#        plugin: substr
+#        start: 6
   view_mode:
     -
       plugin: migration_lookup
@@ -137,10 +138,6 @@ process:
         - '@plugin_id'
         - '@formatter_type'
       map:
-        entityreference:
-          entityreference_label: entity_reference_label
-          entityreference_entity_id: entity_reference_entity_id
-          entityreference_entity_view: entity_reference_entity_view
         taxonomy_term_reference:
           taxonomy_term_reference_link: entity_reference_label
           taxonomy_term_reference_plain: entity_reference_label

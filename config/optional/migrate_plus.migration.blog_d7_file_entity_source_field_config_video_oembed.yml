@@ -40,7 +40,16 @@ process:
       plugin: extract
       index:
         - 1
-  entity_type: constants/entity_type_id
+  entity_type:
+    -
+      plugin: get
+      source: constants/entity_type_id
+    -
+      plugin: static_map
+      map:
+        field_collection_item: paragraph
+        paragraphs_item: paragraph
+      bypass: true
   required: constants/required
   bundle: bundle
   label: source_field_label
@@ -52,4 +61,5 @@ migration_dependencies:
     - blog_d7_file_entity_source_field_video_oembed
     - blog_d7_file_entity_type_video_oembed
   optional:
+    - blog_d7_paragraphs_type
     - blog_d7_file_entity_source_field_video_oembed

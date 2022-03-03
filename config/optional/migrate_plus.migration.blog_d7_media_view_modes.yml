@@ -38,9 +38,19 @@ process:
         - label
         - '@label_fallback'
         - mode
-  targetEntityType: constants/entity_type_id
+  targetEntityType:
+    -
+      plugin: get
+      source: constants/entity_type_id
+    -
+      plugin: static_map
+      map:
+        field_collection_item: paragraph
+        paragraphs_item: paragraph
+      bypass: true
 destination:
   plugin: 'entity:entity_view_mode'
 migration_dependencies:
   required: {  }
-  optional: {  }
+  optional:
+    - blog_d7_paragraphs_type

@@ -1,31 +1,31 @@
 langcode: en
 status: true
 dependencies: {  }
-id: blog_d7_paragraph_fsblog_full_image
-class: null
+id: blog_d7_paragraphs_fsblog_full_image
+class: Drupal\migrate\Plugin\Migration
 field_plugin_method: null
 cck_plugin_method: null
 migration_tags:
-  - Paragraphs
   - 'Drupal 7'
   - Content
+  - 'Paragraphs Content'
 migration_group: blog
-label: 'Paragraph content (fsblog full image section)'
+label: 'Paragraphs (Full width image)'
 source:
   plugin: d7_paragraphs_item
   bundle: fsblog_full_image
   constants:
     langcode: 'und'
-#  key: migrate
-  #varies
-#  field_name: field_fsblog_post_content
+    # instead of defaulting to the source bundle.
+    destination_type: 'content_section'
 process:
-  id: item_id
-  revision_id: revision_id
-  field_name: field_name
+#  id: item_id
+#  revision_id: revision_id
+#  field_name: field_name
   # Force langcode to 'und'. The source site uses 'en' some places and 'und'
   # in others and the content moderation module considers that a critical conflict.
   langcode: constants/langcode
+  type: constants/destination_type
   field_content_section_image:
     -
       plugin: media_migration_delta_sort
@@ -53,5 +53,8 @@ destination:
   # varies
   default_bundle: content_section
 migration_dependencies:
-  required: {}
-  optional: {}
+  required:
+    - blog_d7_paragraphs_type
+    - blog_d7_file_entity_image_public
+  optional:
+    - blog_d7_field_instance

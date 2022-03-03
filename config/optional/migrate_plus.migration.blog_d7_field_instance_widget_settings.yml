@@ -59,14 +59,14 @@ process:
       index:
         - 1
   bundle:
-    0:
+    -
       plugin: migration_lookup
       migration: blog_d7_field_instance
       source:
         - entity_type
         - bundle
         - field_name
-    1:
+    -
 #      plugin: extract
 #      index:
 #        - 1
@@ -78,25 +78,26 @@ process:
         fsblog_section: content_section
         fsblog_full_image: content_section
 #        fs_units: units
-    paragraphs:
-      plugin: paragraphs_process_on_value
-      source_value: entity_type
-      expected_value: field_collection_item
-      process:
-        plugin: substr
-        start: 6
+    # Removed after paragraphs update tp 8.x-1.13
+#    paragraphs:
+#      plugin: paragraphs_process_on_value
+#      source_value: entity_type
+#      expected_value: field_collection_item
+#      process:
+#        plugin: substr
+#        start: 6
   form_mode: constants/form_mode
   field_name: '@field_name_mapped'
   entity_type:
-    0:
+    -
       plugin: get
       source: entity_type
-    1:
+    -
       plugin: static_map
       map:
         file: media
       bypass: true
-    paragraphs:
+    -
       plugin: static_map
       map:
         field_collection_item: paragraph
@@ -126,11 +127,10 @@ process:
         entityreference_autocomplete_tags: entity_reference_autocomplete_tags
         taxonomy_autocomplete: entity_reference_autocomplete
         d7_text: d7_text_default
-        entityreference: entityreference_default
+        list: list_default
         taxonomy_term_reference: taxonomy_term_reference_default
         image_image: media_library_widget
         media_image: media_image_default
-        list: list_default
         paragraphs_embed: entity_reference_paragraphs
         paragraphs: paragraphs_default
   options/settings:

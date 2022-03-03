@@ -23,15 +23,15 @@ process:
       source: type
       method: getFieldType
   entity_type:
-    0:
+    -
       plugin: get
       source: entity_type
-    1:
+    -
       plugin: static_map
       map:
         file: media
       bypass: true
-    paragraphs:
+    -
       plugin: static_map
       map:
         field_collection_item: paragraph
@@ -63,19 +63,19 @@ process:
         fsblog_section: content_section
         fsblog_full_image: content_section
 #        fs_units: units
-  bundle:
-    0:
-      plugin: field_bundle
-      source:
-        - entity_type
-        - '@bundle_mapped'
-    paragraphs:
+    -
       plugin: paragraphs_process_on_value
       source_value: entity_type
       expected_value: field_collection_item
       process:
         plugin: substr
         start: 6
+  bundle:
+    -
+      plugin: field_bundle
+      source:
+        - entity_type
+        - '@bundle_mapped'
   label:
     -
       plugin: static_map

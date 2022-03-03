@@ -36,16 +36,16 @@ process:
         full: Full
         default: Full
   targetEntityType:
-    0:
+    -
       plugin: get
       source: entity_type
-    1:
+    -
       plugin: static_map
       map:
         file: media
         fsblog: post
       bypass: true
-    paragraphs:
+    -
       plugin: static_map
       map:
         field_collection_item: paragraph
@@ -55,4 +55,5 @@ destination:
   plugin: 'entity:entity_view_mode'
 migration_dependencies:
   required: {  }
-  optional: {  }
+  optional:
+    - blog_d7_paragraphs_type

@@ -23,7 +23,16 @@ source:
   source_field_name: field_media_image
   media_migration_original_id: 'd7_file_entity_widget:image'
 process:
-  entity_type: constants/entity_type_id
+  entity_type:
+    -
+      plugin: get
+      source: constants/entity_type_id
+    -
+      plugin: static_map
+      map:
+        field_collection_item: paragraph
+        paragraphs_item: paragraph
+      bypass: true
   bundle: bundle
   form_mode: constants/form_mode
   field_name:
@@ -50,4 +59,5 @@ migration_dependencies:
   required:
     - blog_d7_file_entity_source_field_config_image
   optional:
+    - blog_d7_paragraphs_type
     - blog_d7_file_entity_source_field_image

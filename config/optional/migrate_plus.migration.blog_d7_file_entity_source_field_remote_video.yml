@@ -65,7 +65,16 @@ process:
         - '@preexisting_field_name'
   status: constants/status
   langcode: constants/langcode
-  entity_type: constants/entity_type_id
+  entity_type:
+    -
+      plugin: get
+      source: constants/entity_type_id
+    -
+      plugin: static_map
+      map:
+        field_collection_item: paragraph
+        paragraphs_item: paragraph
+      bypass: true
   type: field_type
   cardinality: constants/cardinality
   settings: settings
@@ -73,4 +82,5 @@ destination:
   plugin: 'entity:field_storage_config'
 migration_dependencies:
   required: {  }
-  optional: {  }
+  optional:
+    - blog_d7_paragraphs_type

@@ -98,17 +98,19 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   // }
 
   switch ($migration->id()) {
-    case 'blog_d7_paragraph_fsblog_section':
+    case 'blog_d7_paragraphs_fsblog_section':
+    case 'blog_d7_paragraphs_fsblog_full_image':
 
       $item_id = $row->getSourceProperty('item_id');
       $revision_id = $row->getSourceProperty('revision_id');
-      echo "\n\r--------------------------------------------------------------\n\r";
-      echo "item_id $item_id, revision_id $revision_id in hook_prepare_row.\n\r";
-      echo "SOURCE\n\r";
-      var_dump($row->getSource());
-      echo "DESTINATION\n\r";
-      var_dump($row->getDestination());
-      
+      // echo "\n\r--------------------------------------------------------------\n\r";
+      // echo "item_id $item_id, revision_id $revision_id in hook_prepare_row.\n\r";
+      // echo "SOURCE\n\r";
+      // var_dump($row->getSource());
+      // echo "DESTINATION\n\r";
+      // var_dump($row->getDestination());
+      $skipped_ids = [4, 9, 11, 123, 125, 233, 235, 328, 240, 241, 242, 244];
+      // echo 'language ' . $row->getSourceProperty('language') . "\n\r";
       // throw new MigrateSkipRowException('Debugging: would have created item_id ' . $item_id . ' with revision_id: ' . $revision_id, TRUE);
       break;
     // case 'blog_d7_node_complete_fsblog':

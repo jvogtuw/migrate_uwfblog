@@ -73,26 +73,57 @@ process:
       plugin: sub_process
       process:
         target_id: fid
+# From before paragraphs update to 8.x-1.13
+#  field_post_lede:
+#    plugin: sub_process
+#    source: field_fsblog_lede
+#    process:
+#      target_id:
+#        - plugin: migration_lookup
+#          migration:
+#            - blog_d7_paragraph_fsblog_section
+#          source: value
+#        - plugin: extract
+#          index:
+#            - 0
+#      target_revision_id:
+#        - plugin: migration_lookup
+#          migration:
+#            - blog_d7_paragraph_fsblog_section
+#          source: value
+#        - plugin: extract
+#          index:
+#            - 1
   field_post_lede:
-    plugin: sub_process
-    source: field_fsblog_lede
-    process:
-      target_id:
-        - plugin: migration_lookup
-          migration:
-            - blog_d7_paragraph_fsblog_section
-          source: value
-        - plugin: extract
-          index:
-            - 0
-      target_revision_id:
-        - plugin: migration_lookup
-          migration:
-            - blog_d7_paragraph_fsblog_section
-          source: value
-        - plugin: extract
-          index:
-            - 1
+    -
+      plugin: sub_process
+      source: field_fsblog_lede
+      process:
+        target_id:
+          -
+            plugin: paragraphs_lookup
+            tags: 'Paragraphs Content'
+            source: value
+          -
+            plugin: extract
+            index:
+              - id
+        target_revision_id:
+          -
+            plugin: paragraphs_lookup
+            tags:
+              - 'Paragraphs Revisions Content'
+              - 'Paragraphs Content'
+            tag_ids:
+              'Paragraphs Revisions Content':
+                - revision_id
+              'Paragraphs Content':
+                - value
+            source: value
+          -
+            plugin: extract
+            index:
+              - revision_id
   # Grab the paragraph entity ID from field_fsblog_lede. The field only allows
   # one paragraph, so the ID is the same for all revisions.
   lede_target_id:
@@ -102,7 +133,7 @@ process:
         target_id:
           - plugin: migration_lookup
             migration:
-              - blog_d7_paragraph_fsblog_section
+              - blog_d7_paragraphs_fsblog_section
             source: value
           - plugin: extract
             index:
@@ -113,48 +144,80 @@ process:
         - target_id
   # Use the paragraph's entity ID to grab the value of field_content_section_body.
   # It appears to grab the latest revision. Needs testing.
-  abstract:
-    -
-      plugin: entity_value
-      source:
-        - '@lede_target_id'
-      entity_type: paragraph
-      field_name: field_content_section_body
-    -
-      plugin: extract
-      index:
-        - 0
-
-  'field_post_abstract/value':
-    plugin: extract
-    source: '@abstract'
-    index:
-      - 0
-      - value
+  # DISABLED FOR NOW. Need paragraph revisions to work first.
+#  abstract:
+#    -
+#      plugin: entity_value
+#      source:
+#        - '@lede_target_id'
+#      entity_type: paragraph
+#      field_name: field_content_section_body
+#    -
+#      plugin: extract
+#      index:
+#        - 0
+#
+#  'field_post_abstract/value':
+#    plugin: extract
+#    source: '@abstract'
+#    index:
+#      - 0
+#      - value
   # Todo: Change this to a different format
   'field_post_abstract/format': 'full_html'
+# From before updating paragraphs to 8.x-1.13
+#  field_post_content:
+#    plugin: sub_process
+#    source: field_fsblog_post_content
+#    process:
+#      target_id:
+#        - plugin: migration_lookup
+#          migration:
+#            - blog_d7_paragraph_fsblog_section
+#            - blog_d7_paragraph_fsblog_full_image
+#          source: value
+#        - plugin: extract
+#          index:
+#            - 0
+#      target_revision_id:
+#        - plugin: migration_lookup
+#          migration:
+#            - blog_d7_paragraph_fsblog_section
+#            - blog_d7_paragraph_fsblog_full_image
+#          source: value
+#        - plugin: extract
+#          index:
+#            - 1
   field_post_content:
-    plugin: sub_process
-    source: field_fsblog_post_content
-    process:
-      target_id:
-        - plugin: migration_lookup
-          migration:
-            - blog_d7_paragraph_fsblog_section
-            - blog_d7_paragraph_fsblog_full_image
-          source: value
-        - plugin: extract
-          index:
-            - 0
-      target_revision_id:
-        - plugin: migration_lookup
-          migration:
-            - blog_d7_paragraph_fsblog_section
-            - blog_d7_paragraph_fsblog_full_image
-          source: value
-        - plugin: extract
-          index:
-            - 1
+    -
+      plugin: sub_process
+      source: field_fsblog_post_content
+      process:
+        target_id:
+          -
+            plugin: paragraphs_lookup
+            tags: 'Paragraphs Content'
+            source: value
+          -
+            plugin: extract
+            index:
+              - id
+        target_revision_id:
+          -
+            plugin: paragraphs_lookup
+            tags:
+              - 'Paragraphs Revisions Content'
+              - 'Paragraphs Content'
+            tag_ids:
+              'Paragraphs Revisions Content':
+                - revision_id
+              'Paragraphs Content':
+                - value
+            source: value
+          -
+            plugin: extract
+            index:
+              - revision_id
 destination:
   plugin: 'entity_complete:node'
   translations: true
@@ -164,7 +227,9 @@ migration_dependencies:
     - blog_d7_user
     - blog_d7_node_type
     - blog_d7_file_entity_image_public
-    - blog_d7_paragraph_fsblog_section
-    - blog_d7_paragraph_fsblog_full_image
+    - blog_d7_paragraphs_fsblog_full_image
+    - blog_d7_paragraphs_fsblog_section
+    - blog_d7_paragraphs_revisions_fsblog_full_image
+    - blog_d7_paragraphs_revisions_fsblog_section
   optional:
     - blog_d7_field_instance

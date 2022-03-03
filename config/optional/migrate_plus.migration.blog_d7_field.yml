@@ -19,15 +19,15 @@ source:
   mapMigrationProcessValueToMedia: true
 process:
   entity_type:
-    0:
+    -
       plugin: get
       source: entity_type
-    1:
+    -
       plugin: static_map
       map:
         file: media
       bypass: true
-    paragraphs:
+    -
       plugin: static_map
       map:
         field_collection_item: paragraph
@@ -60,14 +60,12 @@ process:
       map:
         d7_text:
           d7_text: d7_text
-        entityreference:
-          entityreference: entityreference
+        list:
+          list: list
         taxonomy_term_reference:
           taxonomy_term_reference: taxonomy_term_reference
         media_image:
           media_image: media_image
-        list:
-          list: list
         link_field:
           link_field: link_field
   cardinality: cardinality
@@ -82,4 +80,5 @@ destination:
   plugin: 'entity:field_storage_config'
 migration_dependencies:
   required: {  }
-  optional: {  }
+  optional:
+    - blog_d7_paragraphs_type
