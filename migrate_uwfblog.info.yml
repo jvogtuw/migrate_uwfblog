@@ -8,6 +8,7 @@ dependencies:
   - datetime_range
   - media_migration
   - media_migration_tools
+  - migrate_helper
   - migrate_plus
   - migrate_tools
   - publication_date
