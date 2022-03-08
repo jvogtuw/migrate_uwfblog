@@ -15,6 +15,7 @@ source:
   node_type: fsblog
   constants:
     revision_translation_affected: '1'
+    archived: '1'
 process:
   nid: tnid
   vid: vid
@@ -50,7 +51,7 @@ process:
   path/alias: alias
   published_at: published_at
   field_post_subtitle: field_fsblog_subheading
-  field_post_archived: '1'
+  field_post_archived: constants/archived
   field_post_tags:
     -
       plugin: sub_process
@@ -73,27 +74,6 @@ process:
       plugin: sub_process
       process:
         target_id: fid
-# From before paragraphs update to 8.x-1.13
-#  field_post_lede:
-#    plugin: sub_process
-#    source: field_fsblog_lede
-#    process:
-#      target_id:
-#        - plugin: migration_lookup
-#          migration:
-#            - blog_d7_paragraph_fsblog_section
-#          source: value
-#        - plugin: extract
-#          index:
-#            - 0
-#      target_revision_id:
-#        - plugin: migration_lookup
-#          migration:
-#            - blog_d7_paragraph_fsblog_section
-#          source: value
-#        - plugin: extract
-#          index:
-#            - 1
   field_post_lede:
     -
       plugin: sub_process
@@ -127,67 +107,62 @@ process:
   # Grab the paragraph entity ID from field_fsblog_lede. The field only allows
   # one paragraph, so the ID is the same for all revisions.
   lede_target_id:
-    - plugin: sub_process
+    -
+      plugin: sub_process
       source: field_fsblog_lede
       process:
         target_id:
-          - plugin: migration_lookup
-            migration:
-              - blog_d7_paragraphs_fsblog_section
+          -
+            plugin: paragraphs_lookup
+            tags: 'Paragraphs Content'
             source: value
-          - plugin: extract
+          -
+            plugin: extract
             index:
-              - 0
-    - plugin: extract
+              - id
+    -
+      plugin: extract
       index:
         - 0
         - target_id
   # Use the paragraph's entity ID to grab the value of field_content_section_body.
-  # It appears to grab the latest revision. Needs testing.
-  # DISABLED FOR NOW. Need paragraph revisions to work first.
-#  abstract:
-#    -
-#      plugin: entity_value
-#      source:
-#        - '@lede_target_id'
-#      entity_type: paragraph
-#      field_name: field_content_section_body
-#    -
-#      plugin: extract
-#      index:
-#        - 0
-#
-#  'field_post_abstract/value':
-#    plugin: extract
-#    source: '@abstract'
-#    index:
-#      - 0
-#      - value
-  # Todo: Change this to a different format
-  'field_post_abstract/format': 'full_html'
-# From before updating paragraphs to 8.x-1.13
-#  field_post_content:
-#    plugin: sub_process
-#    source: field_fsblog_post_content
-#    process:
-#      target_id:
-#        - plugin: migration_lookup
-#          migration:
-#            - blog_d7_paragraph_fsblog_section
-#            - blog_d7_paragraph_fsblog_full_image
-#          source: value
-#        - plugin: extract
-#          index:
-#            - 0
-#      target_revision_id:
-#        - plugin: migration_lookup
-#          migration:
-#            - blog_d7_paragraph_fsblog_section
-#            - blog_d7_paragraph_fsblog_full_image
-#          source: value
-#        - plugin: extract
-#          index:
-#            - 1
+  # Gets the value from the current revision of field_post_lede
+  abstract:
+    -
+      plugin: entity_value
+      source:
+        - '@lede_target_id'
+      entity_type: paragraph
+      field_name: field_content_section_body
+    -
+      plugin: extract
+      index:
+        - 0
+        - 0
+
+  field_post_abstract/value:
+    -
+      plugin: extract
+      source: '@abstract'
+      index:
+        - value
+    -
+      plugin: media_wysiwyg_filter
+    -
+      plugin: img_tag_to_embed
+  field_post_abstract/format:
+    -
+      plugin: extract
+      source: '@abstract'
+      index:
+        - format
+    -
+      plugin: static_map
+      bypass: true
+      default_value: basic_html
+      map:
+        full_html: full_html
+        filtered_html: basic_html
   field_post_content:
     -
       plugin: sub_process
