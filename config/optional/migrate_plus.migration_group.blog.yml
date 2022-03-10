@@ -13,4 +13,4 @@ source_type: 'Drupal 7'
 module: migrate_uwfblog
 shared_configuration:
   source:
-    key: d7_blog
+    key: migrate
