@@ -11,4 +11,5 @@ dependencies:
   - migrate_helper
   - migrate_plus
   - migrate_tools
+  - paragraphs
   - publication_date
