@@ -14,7 +14,7 @@ source:
   plugin: d7_file
   scheme: public
   constants:
-    source_base_path: /data/www/facweb13.s.uw.edu/blog/
+    source_base_path: /data/www/.drupal-7-common/sites/blog
 process:
   fid: fid
   filename: filename
