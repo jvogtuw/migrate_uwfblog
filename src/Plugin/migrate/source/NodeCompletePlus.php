@@ -19,6 +19,7 @@ class NodeCompletePlus extends D7NodeComplete {
    * {@inheritdoc}
    */
   public function query() {
+
     $query = parent::query();
     $query->addField('n', 'vid', 'current_vid');
 
@@ -41,12 +42,13 @@ class NodeCompletePlus extends D7NodeComplete {
    * {@inheritdoc}
    */
   public function fields() {
+
     $additional_fields = [
       'alias' => $this->t('Path alias'),
       'published_at' => $this->t('Publication date'),
       'current_vid' => $this->t('Current vid'),
     ];
-    // return ['alias' => $this->t('Path alias')] + parent::fields();
+
     return $additional_fields + parent::fields();
   }
 
@@ -54,18 +56,14 @@ class NodeCompletePlus extends D7NodeComplete {
    * {@inheritdoc}
    */
   public function prepareRow(Row $row) {
+
     // Prepend the original alias for Drupal 9 compatibility. Couldn't figure
-    // out how to do this in the query
+    // out how to do this in the query.
     $original_alias = $row->getSourceProperty('original_alias');
     $alias = (!empty($original_alias) && $row->getSourceProperty('vid') == $row->getSourceProperty('current_vid')) ? '/' . $original_alias : NULL;
     $row->setSourceProperty('alias', $alias);
-    // if (!empty($original_alias) && $row->getSourceProperty('vid') && $row->getSourceProperty('current_vid')) {
-    //   $row->setSourceProperty('alias', '/' . $original_alias);
-    // }
 
     return parent::prepareRow($row);
   }
-
-
 
 }
