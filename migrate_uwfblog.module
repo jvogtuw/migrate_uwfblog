@@ -175,18 +175,4 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       break;
   }
 
-  // Customize menu import - only import the main menu
-  if ($migration->id() == 'blog_d7_menu' || $migration->id() == 'blog_d7_menu_links') {
-    $menu_name = $row->getSourceProperty('menu_name');
-    if ($menu_name !== 'main-menu') {
-      if ($migration->id() == 'blog_d7_menu') {
-        throw new MigrateSkipRowException($menu_name . ' menu was skipped.', TRUE);
-      }
-      else {
-        $link_path = $row->getSourceProperty('link_path');
-        throw new MigrateSkipRowException($menu_name . ' menu link "' . $link_path . '" was skipped.', TRUE);
-      }
-    }
-  }
-
 }
