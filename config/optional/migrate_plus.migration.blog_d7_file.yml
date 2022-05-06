@@ -14,7 +14,7 @@ source:
   plugin: d7_file
   scheme: public
   constants:
-    source_base_path: /data/www/.drupal-7-common/sites/blog
+    source_base_path: /data/www/.drupal-7-common/sites/blog-prod-clone
 process:
   fid: fid
   filename: filename

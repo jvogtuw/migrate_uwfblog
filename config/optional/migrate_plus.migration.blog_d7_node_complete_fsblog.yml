@@ -116,15 +116,31 @@ process:
             plugin: paragraphs_lookup
             tags: 'Paragraphs Content'
             source: value
+#          -
+#            plugin: skip_on_empty
+#            method: process
+#          -
+#            plugin: default_value
+#            default_value:
+#              - null
           -
             plugin: extract
             index:
               - id
+#    -
+#      plugin: skip_on_empty
+#      method: process
+#    -
+#      plugin: default_value
+#      default_value:
+#        - null
+#        - null
     -
       plugin: extract
       index:
         - 0
         - target_id
+      default: ''
   # Use the paragraph's entity ID to grab the value of field_content_section_body.
   # Gets the value from the current revision of field_post_lede
   abstract:
@@ -139,6 +155,7 @@ process:
       index:
         - 0
         - 0
+      default: {  }
 
   field_post_abstract/value:
     -
@@ -146,6 +163,7 @@ process:
       source: '@abstract'
       index:
         - value
+      default: null
     -
       plugin: media_wysiwyg_filter
     -
@@ -156,13 +174,14 @@ process:
       source: '@abstract'
       index:
         - format
+      default: null
     -
       plugin: static_map
-      bypass: true
-      default_value: basic_html
+#      bypass: true
+      default_value: full_html
       map:
         full_html: full_html
-        filtered_html: basic_html
+        filtered_html: standard_html
   field_post_content:
     -
       plugin: sub_process

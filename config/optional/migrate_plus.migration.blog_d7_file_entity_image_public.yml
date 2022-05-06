@@ -48,18 +48,22 @@ process:
       plugin: media_wysiwyg_filter
     -
       plugin: img_tag_to_embed
-  field_file_image_description:
-    -
-      plugin: get
-      source: field_file_image_description
-    -
-      plugin: media_wysiwyg_filter
-    -
-      plugin: img_tag_to_embed
-  field_file_image_desc_link:
+#  field_file_image_description:
+#    -
+#      plugin: get
+#      source: field_file_image_description
+#    -
+#      plugin: media_wysiwyg_filter
+#    -
+#      plugin: img_tag_to_embed
+#  field_file_image_desc_link:
+#    -
+#      plugin: field_link
+#      source: field_file_image_desc_link
+  field_media_source:
     -
       plugin: field_link
-      source: field_file_image_desc_link
+      source: field_media_source
   field_media_image/target_id: fid
   field_media_image/display: display
   field_media_image/description: description

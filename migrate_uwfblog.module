@@ -38,6 +38,8 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'field_tags',
     'field_unit_abbreviation', // From fs_units vocab
     'field_fsblog_unit',
+    'field_file_image_description',
+    'field_file_image_desc_link',
     // 'field_fsblog_lede'
   ];
   $excluded_entity_types = [
@@ -62,6 +64,8 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'image_left_no_link',
     'image_only',
     'image_right',
+    'image_none',
+    'image_test',
     'slideshow_slide'
   ];
 
@@ -249,6 +253,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     // Customize file import
     case 'blog_d7_file':
       $filepath = $row->getSourceProperty('filepath');
+      // $debug = TRUE;
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created file ' . $filepath, TRUE);
       }

@@ -78,7 +78,8 @@ class MapTextFormat extends ProcessPluginBase {
     if (!empty($source_format)) {
       $map = [
         'full_html' => 'full_html',
-        'filtered_html' => 'basic_html'
+        // 'filtered_html' => 'basic_html',
+        'filtered_html' => 'standard_html'
       ];
       return $map[$source_format];
     }

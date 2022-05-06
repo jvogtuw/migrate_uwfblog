@@ -21,7 +21,7 @@ process:
       # mapping sections to new ids
       plugin: static_map
       source: bundle
-#      bypass: true
+      bypass: true
       map:
         fsblog_section: content_section
 #        fsblog_full_image: image_section
@@ -37,6 +37,7 @@ process:
 #      bypass: true
       map:
         'FS blog section': 'Content section'
+        'UWF blog section': 'Content section'
 #        image_section: fsblog_full_image
       # using existing labels
 #      plugin: get

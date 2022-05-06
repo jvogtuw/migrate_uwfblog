@@ -11,7 +11,7 @@ migration_tags:
 migration_group: blog
 label: 'User accounts'
 source:
-  plugin: d7_user
+  plugin: d7_shibboleth_user
 process:
   uid:
       plugin: skip_on_value
@@ -72,6 +72,7 @@ process:
 #      migration: blog_d7_file
   field_first_name: field_first_name
   field_last_name: field_last_name
+  shibboleth_username: shibboleth_username
 destination:
   plugin: 'entity:user'
 migration_dependencies:
