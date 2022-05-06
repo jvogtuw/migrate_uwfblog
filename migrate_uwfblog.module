@@ -87,20 +87,8 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'field_last_name' => 'field_user_last_name',
     'field_file_image_description' => 'field_media_descriptive_text'
   ];
-  $bundle_map = [
-    'fsblog' => 'post',
-    'fsblog_section' => 'content_section',
-    'fsblog_full_image' => 'image_section',
-    // 'fs_units' => 'units',
-  ];
 
-
-  // TEMP COMMENT OUT
-  // if ($debug && ($row->hasSourceProperty('view_mode') || $row->hasDestinationProperty('view_mode'))) {
-  //   $view_mode = $row->getSourceProperty('view_mode') ?? $row->getDestinationProperty('view_mode');
-  //   throw new MigrateSkipRowException('Debugging: view mode is ' . $view_mode, TRUE);
-  // }
-
+  // Reactions to specific migration IDs.
   switch ($migration->id()) {
     // case 'blog_d7_paragraphs_fsblog_section':
     // case 'blog_d7_paragraphs_fsblog_full_image':
@@ -165,12 +153,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created ' . $node_bundle, TRUE);
       }
-
-      // TEMP COMMENT OUT
-      // Rename some node types
-      // if (array_key_exists($node_bundle, $bundle_map)) {
-      //   $row->setSourceProperty('type', $bundle_map[$node_bundle]);
-      // }
       break;
 
     // Customize paragraph type definitions
@@ -179,17 +161,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created ' . $paragraph_bundle, TRUE);
       }
-
-      // TEMP COMMENT OUT
-      // Rename the paragraph types
-      // if (array_key_exists($paragraph_bundle, $bundle_map)) {
-      //   $row->setSourceProperty('bundle', $bundle_map[$paragraph_bundle]);
-      // }
-      // TEMP COMMENT OUT
-      // Also, change the name of the content section.
-      // if ($paragraph_bundle == 'fsblog_section') {
-      //   $row->setSourceProperty('name', 'Content section');
-      // }
       break;
 
     // Customize Taxonomy vocabulary definitions
@@ -204,7 +175,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created ' . $vocabulary, TRUE);
       }
-
       break;
 
     // Customize field instances and settings
@@ -281,7 +251,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       }
       break;
 
-    // Customize view mode definitions
+    // Customize media view mode definitions
     case 'blog_d7_media_view_modes':
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: Would have created ' . $row->getSourceProperty('mode'), TRUE);
