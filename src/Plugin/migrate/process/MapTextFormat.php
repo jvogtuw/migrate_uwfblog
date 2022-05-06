@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\migrate_uwfblog\Plugin\migrate\process;
 
 use Drupal\migrate\ProcessPluginBase;
@@ -69,20 +70,33 @@ class MapTextFormat extends ProcessPluginBase {
       $value['format'] = $this->mapFormat($value['format']);
     }
     return $value;
+
   }
 
+  /**
+   * Maps text formats from source to destination.
+   *
+   * @param string $source_format
+   *   The source text format.
+   *
+   * @return string
+   *   Returns the destination text format.
+   */
   protected function mapFormat($source_format = '') {
+
     if (isset($this->configuration['format'])) {
       return $this->configuration['format'];
     }
+
     if (!empty($source_format)) {
       $map = [
         'full_html' => 'full_html',
-        // 'filtered_html' => 'basic_html',
-        'filtered_html' => 'standard_html'
+        'filtered_html' => 'standard_html',
       ];
       return $map[$source_format];
     }
+
     return $this->configuration['default_format'] ?? 'basic_html';
   }
+
 }

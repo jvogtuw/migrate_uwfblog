@@ -7,9 +7,11 @@ Drupal 7 UWF Blog to Drupal 9.
 Instructions
 ------------
 
-1) Install a Drupal 9 site using the facilities_boundless profile (this will be replaced with the starter site). Make sure you have:
+1) Install a Drupal 9 site using the facilities_boundless profile (this will be
+   replaced with the starter site). Make sure you have:
   - These text filters: full_html; standard_html
-  - These roles (besides the default admin, anon, auth): content manager; content admin
+  - These roles (besides the default admin, anon, auth): content manager;
+    content admin
 
 2) Copy example.settings.local.php to the new site's directory and rename it to
    settings.local.php. Make sure the settings.php file knows about
@@ -17,7 +19,8 @@ Instructions
 
 3) Add the following lines to settings.local.php:
 
-    /** Tell the media_migration module to convert embed tokens to media_embed, preferably. */
+    /** Tell the media_migration module to convert embed tokens to media_embed,
+   preferably. */
     $settings['media_migration_embed_token_transform_destination_filter_plugin'] =
     'media_embed';
     $settings['media_migration_embed_media_reference_method'] = 'uuid';
@@ -29,11 +32,16 @@ Instructions
 
 4) Define a database connection:
    - ['migrate']['default']
-  Technically, you can call it something other than 'migrate' but you'll have to define another connection called 'migrate'. The Drush migrate commands will error if it can't find a 'migrate' connection even if your migration is looking for something else.
+  Technically, you can call it something other than 'migrate' but you'll have to
+     define another connection called 'migrate'. The Drush migrate commands will
+     error if it can't find a 'migrate' connection even if your migration is
+     looking for something else.
 
 5) Make sure that the following modules are disabled:
-   - transliterate_filenames (It messes with migrating file paths and creates duplicate files. Reinstall it once you're done with migrations.)
-   - web_profiler (It has some classes that cause namespace errors with multiple modules.)
+   - transliterate_filenames (It messes with migrating file paths and creates
+     duplicate files. Reinstall it once you're done with migrations.)
+   - web_profiler (It has some classes that cause namespace errors with multiple
+     modules.)
 
 Continue to the caveats for additional info before executing the migrations.
 
@@ -59,13 +67,14 @@ Caveats
 After migration
 ---------------
 
-1) After the migrations are complete, reenable transliterate_filenames. Only do this once you know you're done running migrations.
+1) After the migrations are complete, reenable transliterate_filenames. Only do
+   this once you know you're done running migrations.
 
 2) Post field organization:
    - Hide the field_post_lede on Blog post nodes. It was migrated to make it
-     easier to copy the contents of its body field to the new field_post_abstract.
-     You can delete the field entirely once you're absolutely sure you're done
-     migrating.
+     easier to copy the contents of its body field to the new
+     field_post_abstract. You can delete the field entirely once you're
+     absolutely sure you're done migrating.
    - Hide the 'Archived' field from edit form and display.
    - Update the 'Abstract (temp field - don't use)' field label to just
      'Abstract'.
@@ -88,17 +97,24 @@ Highlights
 
 Some of the things this migration does/has...
 
-* Process plugin mapping text formats. Not entirely sure it's necessary but it's at least one way to do it.
+* Process plugin mapping text formats. Not entirely sure it's necessary but it's
+  at least one way to do it.
 
-* Source plugin to get the alias and publication date. There was an issue migrating the aliases with a separate migration. Something cause by renaming the node bundle I think, but it's been a while.
+* Source plugin to get the alias and publication date. There was an issue
+  migrating the aliases with a separate migration. Something cause by renaming
+  the node bundle I think, but it's been a while.
 
 * Configuration changes:
-  - Combined two paragraph types ("section" and "full_image") into a single paragraph type ("content_section").
+  - Combined two paragraph types ("section" and "full_image") into a single
+    paragraph type ("content_section").
   - Changed node bundle name: "fsblog" to "post"
   - Changed many field names
 
-* Updated embedded media tags with media_wysiwyg_filter process plugin (see media_migration module).
+* Updated embedded media tags with media_wysiwyg_filter process plugin (see
+  media_migration module).
 
-* Pulled the value from a field within a paragraph to a node-level field. Lede to Abstract.
+* Pulled the value from a field within a paragraph to a node-level field. Lede
+  to Abstract.
 
-* Converted document/video/image entities to media entities with media_migration.
+* Converted document/video/image entities to media entities with
+  media_migration.

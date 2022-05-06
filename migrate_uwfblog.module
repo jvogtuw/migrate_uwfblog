@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * This file contains hook implementations for the UWF Blog migration.
@@ -20,9 +21,7 @@ use Drupal\migrate\Row;
  *
  * This function will be called once for every row in every migration.
  *
- *
- * @see https://drupalize.me/tutorial/use-hookmigratepreparerow?p=2578 for more
- *   info.
+ * @see https://drupalize.me/tutorial/use-hookmigratepreparerow?p=2578
  */
 function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $source, MigrationInterface $migration) {
   $debug = FALSE;
@@ -30,12 +29,15 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   // Exclude elements from the source site that we don't want to migrate.
   $excluded_fields = [
     'comment_body',
-    'field_fsblog_p_class', // Paragraphs won't have style options
-    'field_fsblog_highlight', // Replaced with 'Promoted' checkbox
+    // Paragraphs won't have style options.
+    'field_fsblog_p_class',
+    // Replaced with 'Promoted' checkbox.
+    'field_fsblog_highlight',
     'field_page_related_entity',
     'field_image',
     'field_tags',
-    'field_unit_abbreviation', // From fs_units vocab
+    // From fs_units vocab.
+    'field_unit_abbreviation',
     'field_fsblog_unit',
     'field_file_image_description',
     'field_file_image_desc_link',
@@ -47,8 +49,9 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'comment',
   ];
 
+  // Node and taxonomy vocab bundles that won't be migrating.
   $excluded_bundles = [
-    'article', // Remnants from this content type being deleted
+    'article',
     'panel',
     'fs_units',
   ];
@@ -69,13 +72,13 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'image_right',
     'image_none',
     'image_test',
-    'slideshow_slide'
+    'slideshow_slide',
   ];
 
   // Reactions to specific migration IDs.
   switch ($migration->id()) {
 
-    // Customize field definitions
+    // Customize field definitions.
     case 'blog_d7_field':
       $field_name = $row->getSourceProperty('field_name');
       $entity_type = $row->getSourceProperty('entity_type');
@@ -85,17 +88,17 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         throw new MigrateSkipRowException('Debugging: would have created field ' . $field_name, TRUE);
       }
 
-      // Skip unwanted fields
+      // Skip unwanted fields.
       if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
       break;
 
-    // Customize Node type definitions
+    // Customize Node type definitions.
     case 'blog_d7_node_type':
       $node_bundle = $row->getSourceProperty('type');
 
-      // Skip unwanted bundles
+      // Skip unwanted bundles.
       if (in_array($node_bundle, $excluded_bundles)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
@@ -105,11 +108,11 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       }
       break;
 
-    // Customize Taxonomy vocabulary definitions
+    // Customize Taxonomy vocabulary definitions.
     case 'blog_d7_taxonomy_vocabulary':
       $vocabulary = $row->getSourceProperty('machine_name');
 
-      // Skip unwanted bundles
+      // Skip unwanted bundles.
       if (in_array($vocabulary, $excluded_bundles)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
@@ -119,7 +122,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       }
       break;
 
-    // Customize field instances and settings
+    // Customize field instances and settings.
     case 'blog_d7_field_instance':
     case 'blog_d7_field_formatter_settings':
     case 'blog_d7_field_instance_widget_settings':
@@ -128,7 +131,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $entity_type = $row->getSourceProperty('entity_type');
       $bundle = $row->getSourceProperty('bundle');
 
-      // Skip some fields
+      // Skip some fields.
       if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
@@ -137,14 +140,14 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         throw new MigrateSkipRowException('Debugging: would have created ' . $field_name, TRUE);
       }
 
-      // Exclude specific view modes
+      // Exclude specific view modes.
       $view_mode = $row->getSourceProperty('view_mode') ?? NULL;
       if (!is_null($view_mode) && in_array($view_mode, $excluded_view_modes)) {
         throw new MigrateSkipRowException($view_mode . ' view modes ignored.', TRUE);
       }
       break;
 
-    // Customize file import
+    // Customize file import.
     case 'blog_d7_file':
       $filepath = $row->getSourceProperty('filepath');
       // $debug = TRUE;
@@ -156,19 +159,19 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       }
       break;
 
-    // Customize view mode definitions
+    // Customize view mode definitions.
     case 'blog_d7_view_modes':
       $view_mode = $row->getSourceProperty('view_mode');
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: Would have created ' . $view_mode . ' view mode', TRUE);
       }
 
-      // Exclude all view modes for ignored entity types
+      // Exclude all view modes for ignored entity types.
       $entity_type = $row->getSourceProperty('entity_type');
       if (in_array($entity_type, $excluded_entity_types)) {
         throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
       }
-      // Exclude specific view modes
+      // Exclude specific view modes.
       if (in_array($view_mode, $excluded_view_modes)) {
         throw new MigrateSkipRowException($view_mode . ' view modes ignored.', TRUE);
       }
