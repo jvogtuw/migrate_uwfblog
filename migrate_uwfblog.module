@@ -30,26 +30,29 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
   // Exclude elements from the source site that we don't want to migrate.
   $excluded_fields = [
     'comment_body',
-    'field_fsblog_p_class', // Temporarily?
+    'field_fsblog_p_class', // Paragraphs won't have style options
     'field_fsblog_highlight', // Replaced with 'Promoted' checkbox
     'field_page_related_entity',
-    // 'field_fsblog_post_content', // Temporarily
     'field_image',
     'field_tags',
     'field_unit_abbreviation', // From fs_units vocab
     'field_fsblog_unit',
     'field_file_image_description',
     'field_file_image_desc_link',
-    // 'field_fsblog_lede'
   ];
+
+  // While I managed to completely get rid of comments, it was more trouble than
+  // it was worth.
   $excluded_entity_types = [
     'comment',
   ];
+
   $excluded_bundles = [
     'article', // Remnants from this content type being deleted
     'panel',
     'fs_units',
   ];
+
   $excluded_view_modes = [
     'custom_search_result',
     'fs_search_result',
@@ -69,63 +72,9 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
     'slideshow_slide'
   ];
 
-  // We want to change the IDs for some elements. Here we map the old (source)
-  // name to the new (destination) name.
-  $field_name_map = [
-    'field_fsblog_p_image' => 'field_p_isec_image',
-    'field_fsblog_p_title' => 'field_p_csec_title',
-    'field_fsblog_p_body' => 'field_p_csec_body',
-    'field_fsblog_p_class' => 'field_p_csec_style',
-    'field_fsblog_subheading' => 'field_post_subtitle',
-    'field_fsblog_unit' => 'field_post_unit',
-    'field_fsblog_tags' => 'field_post_tags',
-    'field_fsblog_hero' => 'field_post_hero',
-    'field_fsblog_hero_thumb' => 'field_post_hero_thumb',
-    'field_fsblog_lede' => 'field_post_lede',
-    'field_fsblog_post_content' => 'field_post_content',
-    'field_first_name' => 'field_user_first_name',
-    'field_last_name' => 'field_user_last_name',
-    'field_file_image_description' => 'field_media_descriptive_text'
-  ];
-
   // Reactions to specific migration IDs.
   switch ($migration->id()) {
-    // case 'blog_d7_paragraphs_fsblog_section':
-    // case 'blog_d7_paragraphs_fsblog_full_image':
-    //
-    //   $item_id = $row->getSourceProperty('item_id');
-    //   $revision_id = $row->getSourceProperty('revision_id');
-    //   // echo "\n\r--------------------------------------------------------------\n\r";
-    //   // echo "item_id $item_id, revision_id $revision_id in hook_prepare_row.\n\r";
-    //   // echo "SOURCE\n\r";
-    //   // var_dump($row->getSource());
-    //   // echo "DESTINATION\n\r";
-    //   // var_dump($row->getDestination());
-    //   $skipped_ids = [4, 9, 11, 123, 125, 233, 235, 328, 240, 241, 242, 244];
-    //   // echo 'language ' . $row->getSourceProperty('language') . "\n\r";
-    //   // throw new MigrateSkipRowException('Debugging: would have created item_id ' . $item_id . ' with revision_id: ' . $revision_id, TRUE);
-    //   break;
-    // case 'blog_d7_node_complete_fsblog':
-    //   $lede = $row->getSourceProperty('field_fsblog_lede');
-    //   // $row->
-    //   dpm($lede, 'lede');
-    //   break;
-    // case 'blog_d7_pathauto_patterns':
-      // dpm($row, 'row');
-      // break;
-    // case 'blog_d7_url_alias':
-    //   $alias = $row->getSourceProperty('alias');
-    //   if ($debug) {
-    //     throw new MigrateSkipRowException('Debugging: would have created alias ' . $alias, TRUE);
-    //   }
-    //   break;
 
-    // case 'blog_d7_node_complete_fsblog':
-    //   $alias = $row->getSourceProperty('alias');
-    //   if ($debug) {
-    //     throw new MigrateSkipRowException('Debugging: would have created alias ' . $alias, TRUE);
-    //   }
-    //   break;
     // Customize field definitions
     case 'blog_d7_field':
       $field_name = $row->getSourceProperty('field_name');
@@ -136,6 +85,7 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         throw new MigrateSkipRowException('Debugging: would have created field ' . $field_name, TRUE);
       }
 
+      // Skip unwanted fields
       if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
         throw new MigrateSkipRowException('Intentionally skipped.', TRUE);
       }
@@ -152,14 +102,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
 
       if ($debug) {
         throw new MigrateSkipRowException('Debugging: would have created ' . $node_bundle, TRUE);
-      }
-      break;
-
-    // Customize paragraph type definitions
-    case 'blog_d7_paragraphs_type':
-      $paragraph_bundle = $row->getSourceProperty('bundle');
-      if ($debug) {
-        throw new MigrateSkipRowException('Debugging: would have created ' . $paragraph_bundle, TRUE);
       }
       break;
 
@@ -185,24 +127,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       $field_name = $row->getSourceProperty('field_name');
       $entity_type = $row->getSourceProperty('entity_type');
       $bundle = $row->getSourceProperty('bundle');
-
-      // if ($field_name == 'field_post_abstract') {
-      //   echo "hi\n\r";
-      // }
-      // if ($migration->id() == 'blog_d7_field_instance') {
-      //   if ($row->getSourceProperty('type') == 'paragraphs'
-      //     && $row->hasSourceProperty('settings')) {
-      //     $settings = $row->getSourceProperty('settings');
-      //     if (isset($settings['allowed_bundles'])) {
-      //       $allowed_bundles = ['content_section'];
-      //     }
-      //     $row->setSourceProperty('settings', $settings);
-      //     // $allowed_bundles = $row->getSourceProperty('settings')['allowed_bundles'];
-      //     // $keys = array_keys($row->getSourceProperty('settings'));
-      //     // echo implode(', ', $allowed_bundles) . "\n\r";
-      //     // var_dump($row->getSourceProperty('handler_settings'));
-      //   }
-      // }
 
       // Skip some fields
       if (in_array($entity_type, $excluded_entity_types) || in_array($bundle, $excluded_bundles) || in_array($field_name, $excluded_fields)) {
@@ -239,7 +163,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
         throw new MigrateSkipRowException('Debugging: Would have created ' . $view_mode . ' view mode', TRUE);
       }
 
-      // TEMP COMMENT OUT
       // Exclude all view modes for ignored entity types
       $entity_type = $row->getSourceProperty('entity_type');
       if (in_array($entity_type, $excluded_entity_types)) {
@@ -248,24 +171,6 @@ function migrate_uwfblog_migrate_prepare_row(Row $row, MigrateSourceInterface $s
       // Exclude specific view modes
       if (in_array($view_mode, $excluded_view_modes)) {
         throw new MigrateSkipRowException($view_mode . ' view modes ignored.', TRUE);
-      }
-      break;
-
-    // Customize media view mode definitions
-    case 'blog_d7_media_view_modes':
-      if ($debug) {
-        throw new MigrateSkipRowException('Debugging: Would have created ' . $row->getSourceProperty('mode'), TRUE);
-      }
-      // Exclude all view modes for ignored entity types
-      // $entity_type = $row->getSourceProperty('entity_type');
-      // if (in_array($entity_type, $excluded_entity_types)) {
-      //   throw new MigrateSkipRowException($entity_type . ' entities ignored.', TRUE);
-      // }
-      break;
-
-    case 'blog_d7_file_entity_formatter_image':
-      if ($debug) {
-        throw new MigrateSkipRowException('Debugging: would have created ' . $row->getSourceProperty('field_name') . ' with view mode ' . $row->getDestinationProperty('view_mode'), TRUE);
       }
       break;
   }
