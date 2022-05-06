@@ -67,9 +67,6 @@ process:
         - bundle
         - field_name
     -
-#      plugin: extract
-#      index:
-#        - 1
       plugin: static_map
       source: '@bundle_mapped'
       bypass: true
@@ -77,15 +74,6 @@ process:
         fsblog: post
         fsblog_section: content_section
         fsblog_full_image: content_section
-#        fs_units: units
-    # Removed after paragraphs update tp 8.x-1.13
-#    paragraphs:
-#      plugin: paragraphs_process_on_value
-#      source_value: entity_type
-#      expected_value: field_collection_item
-#      process:
-#        plugin: substr
-#        start: 6
   form_mode: constants/form_mode
   field_name: '@field_name_mapped'
   entity_type:

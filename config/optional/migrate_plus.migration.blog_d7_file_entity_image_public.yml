@@ -48,18 +48,6 @@ process:
       plugin: media_wysiwyg_filter
     -
       plugin: img_tag_to_embed
-#  field_file_image_description:
-#    -
-#      plugin: get
-#      source: field_file_image_description
-#    -
-#      plugin: media_wysiwyg_filter
-#    -
-#      plugin: img_tag_to_embed
-#  field_file_image_desc_link:
-#    -
-#      plugin: field_link
-#      source: field_file_image_desc_link
   field_media_source:
     -
       plugin: field_link

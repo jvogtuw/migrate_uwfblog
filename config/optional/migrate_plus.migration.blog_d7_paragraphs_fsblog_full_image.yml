@@ -19,9 +19,6 @@ source:
     # instead of defaulting to the source bundle.
     destination_type: 'content_section'
 process:
-#  id: item_id
-#  revision_id: revision_id
-#  field_name: field_name
   # Force langcode to 'und'. The source site uses 'en' some places and 'und'
   # in others and the content moderation module considers that a critical conflict.
   langcode: constants/langcode
@@ -34,23 +31,8 @@ process:
       plugin: sub_process
       process:
         target_id: fid
-#      revision_id: revision_id
-#    plugin: sub_process
-#    # varies (field)
-#    source: field_branch_node
-#    process:
-#      target_id: target_id
-  #varies
-#  field_visible_branch_text:
-#    plugin: sub_process
-#    # varies (field)
-#    source: field_visible_branch_text
-#    process:
-#      value: value
-#    revision_id: revision_id
 destination:
   plugin: 'entity_reference_revisions:paragraph'
-  # varies
   default_bundle: content_section
 migration_dependencies:
   required:

@@ -62,7 +62,6 @@ process:
         fsblog: post
         fsblog_section: content_section
         fsblog_full_image: content_section
-#        fs_units: units
     -
       plugin: paragraphs_process_on_value
       source_value: entity_type
@@ -83,7 +82,6 @@ process:
       bypass: true
       map:
         'Subheading': 'Subtitle'
-#        'Lede': 'Abstract'
   description: description
   required: '0'
   status: constants/status

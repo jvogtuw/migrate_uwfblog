@@ -50,8 +50,6 @@ process:
         field_fsblog_p_image: field_content_section_image
         field_fsblog_p_title: field_content_section_title
         field_fsblog_p_body: field_content_section_body
-#      plugin: get
-#      source: field_name
   type:
     -
       plugin: process_field

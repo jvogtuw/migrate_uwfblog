@@ -4,10 +4,12 @@ UWF Blog Migration
 This module assists in the migration of configuration and content from the
 Drupal 7 UWF Blog to Drupal 9.
 
-Basic use
----------
+Instructions
+------------
 
-1) Install a Drupal 9 site using the facilities_boundless profile (this will be replaced with the starter site).
+1) Install a Drupal 9 site using the facilities_boundless profile (this will be replaced with the starter site). Make sure you have:
+  - These text filters: full_html; standard_html
+  - These roles (besides the default admin, anon, auth): content manager; content admin
 
 2) Copy example.settings.local.php to the new site's directory and rename it to
    settings.local.php. Make sure the settings.php file knows about
@@ -45,11 +47,11 @@ Caveats
    Drupal\pathauto\Plugin\migrate\source\PathautoPattern, just create the 'post'
    pattern manually.
 
-3) Running migrate update on the paragraph item migrations is not recommended
+2) Running migrate update on the paragraph item migrations is not recommended
    because it (sometimes?) throws errors when changes are found. Something
    about trying to change the revision ID. [Not sure if this is still true]
 
-4) If a lede paragraph changes in the source, you'll need to rollback and rerun
+3) If a lede paragraph changes in the source, you'll need to rollback and rerun
    both blog_d7_paragraph_fsblog_section and blog_d7_node_complete_fsblog, in
    that order, to update the destination's field_post_abstract.
 
@@ -79,3 +81,24 @@ After migration
 7) Configure Solr search.
 
 8) Set the allowed paragraph types for field_post_content.
+
+
+Highlights
+----------
+
+Some of the things this migration does/has...
+
+* Process plugin mapping text formats. Not entirely sure it's necessary but it's at least one way to do it.
+
+* Source plugin to get the alias and publication date. There was an issue migrating the aliases with a separate migration. Something cause by renaming the node bundle I think, but it's been a while.
+
+* Configuration changes:
+  - Combined two paragraph types ("section" and "full_image") into a single paragraph type ("content_section").
+  - Changed node bundle name: "fsblog" to "post"
+  - Changed many field names
+
+* Updated embedded media tags with media_wysiwyg_filter process plugin (see media_migration module).
+
+* Pulled the value from a field within a paragraph to a node-level field. Lede to Abstract.
+
+* Converted document/video/image entities to media entities with media_migration.

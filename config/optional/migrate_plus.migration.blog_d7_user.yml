@@ -59,17 +59,6 @@ process:
         9: 'content_admin'
         # Content admin role ID in test, prod
         10: 'content_admin'
-#      plugin: migration_lookup
-#      migration: blog_d7_user_role
-#      source: roles
-#  user_picture:
-#    -
-#      plugin: default_value
-#      source: picture
-#      default_value: null
-#    -
-#      plugin: migration_lookup
-#      migration: blog_d7_file
   field_first_name: field_first_name
   field_last_name: field_last_name
   shibboleth_username: shibboleth_username
@@ -77,11 +66,5 @@ destination:
   plugin: 'entity:user'
 migration_dependencies:
   required: { }
-#    - blog_d7_user_role
   optional:
     - blog_d7_field_instance
-#    - blog_d7_file
-#    - blog_user_picture_field_instance
-#    - blog_user_picture_entity_display
-#    - blog_user_picture_entity_form_display
-#    - blog_d7_user_role

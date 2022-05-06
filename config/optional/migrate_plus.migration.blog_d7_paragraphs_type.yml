@@ -24,24 +24,15 @@ process:
       bypass: true
       map:
         fsblog_section: content_section
-#        fsblog_full_image: image_section
-      # using the existing ids
-#      plugin: get
-#      source: bundle
 
   label:
     -
       # mapping section to new labels
       plugin: static_map
       source: name
-#      bypass: true
       map:
         'FS blog section': 'Content section'
         'UWF blog section': 'Content section'
-#        image_section: fsblog_full_image
-      # using existing labels
-#      plugin: get
-#      source: name
   description: description
 destination:
   plugin: 'entity:paragraphs_type'

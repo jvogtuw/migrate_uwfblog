@@ -116,25 +116,10 @@ process:
             plugin: paragraphs_lookup
             tags: 'Paragraphs Content'
             source: value
-#          -
-#            plugin: skip_on_empty
-#            method: process
-#          -
-#            plugin: default_value
-#            default_value:
-#              - null
           -
             plugin: extract
             index:
               - id
-#    -
-#      plugin: skip_on_empty
-#      method: process
-#    -
-#      plugin: default_value
-#      default_value:
-#        - null
-#        - null
     -
       plugin: extract
       index:
@@ -177,7 +162,6 @@ process:
       default: null
     -
       plugin: static_map
-#      bypass: true
       default_value: full_html
       map:
         full_html: full_html

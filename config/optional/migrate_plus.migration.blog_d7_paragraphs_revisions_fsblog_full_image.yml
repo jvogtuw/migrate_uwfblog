@@ -15,7 +15,6 @@ source:
   plugin: d7_paragraphs_item_revision
   bundle: fsblog_full_image
   constants:
-#    langcode: 'und'
     # instead of defaulting to the source bundle.
     destination_type: 'content_section'
 process:
@@ -29,7 +28,6 @@ process:
       plugin: extract
       index:
         - id
-#  type: bundle
   type: constants/destination_type
   field_content_section_image:
     -
